@@ -10,8 +10,17 @@ SyRA is a real-time **ALLOW / WARN / BLOCK** engine whose differentiator is
 mixed Arabic/English script, and IDN/homograph URLs — **normalised before**
 pattern matching, then scored on a Tier-1 → Tier-2 path (**no OpenAI key required**).
 
+**What ships by default (key-off):** rule-based MultilingualAgent normalisation +
+Tier-1 heuristics + Tier-2 TF-IDF (pure-Python fallback). DistilBERT loads only if
+Torch is present; Tier-3 LLM stays off unless you configure a key. Classical NLP
+first — optional neural, not required for the demo.
+
 That is the submission. Everything else on the site is supporting evidence around
 that engine.
+
+**Judge-facing without a local run:** the [video](https://drive.google.com/file/d/17ZsBSLqrz5cewd28SXtxZfPUBD_TFRZq/view?usp=drive_link)
+plus the written `/eval` numbers below. Live URLs are localhost (`:5174` / `:8001`);
+a public deploy may 502 — prefer [SETUP.md](SETUP.md) or the video.
 
 ---
 
@@ -33,12 +42,19 @@ SyRA’s MultilingualAgent is built for that mess as the **primary attack surfac
 not an afterthought checkbox.
 
 **Where it shows up in the wild (short):** form/CRM input is already abused —
-SuiteCRM SQLi ([CVE-2023-5350](https://nvd.nist.gov/vuln/detail/CVE-2023-5350));
-Salesforce Web-to-Lead → Agentforce prompt injection
-([Zenity / The Register, 2026](https://www.theregister.com/security/2026/09/24/salesforce-agentforce-vulns-allowed-0-click-crm-data-theft-anonymous-phishing/5298958)).
-Enterprise input-security (WAF/DLP/CASB) is a **low-tens-of-billions** category
-overall, but still optimized for anglophone, clean-script stacks — the gap SyRA targets.
-<small>WAF ~$6–9B (2024–25, [EMR](https://www.researchandmarkets.com/reports/6112911/web-application-firewall-market-report-forecast) / [Fortune](https://www.fortunebusinessinsights.com/web-application-firewall-market-108841)); DLP ~$4.3B ([Stratview](https://www.stratviewresearch.com/market-reports/data-loss-prevention-market.html)); CASB ~$4.9B ([Grand View](https://www.grandviewresearch.com/horizon/statistics/cloud-security-market/solution/casb/global)).</small>
+
+- SuiteCRM SQLi — [CVE-2023-5350 (NVD)](https://nvd.nist.gov/vuln/detail/CVE-2023-5350)
+- Salesforce Web-to-Lead → Agentforce indirect prompt injection —
+  [Zenity Labs · SalesBleed](https://labs.zenity.io/post/salesbleed-0-click-data-exfiltration-on-agentforce);
+  related: [Noma · ForcedLeak](https://www.noma.security/blog/forcedleak-agent-risks-exposed-in-salesforce-agentforce)
+
+Enterprise input-security (WAF / DLP / CASB) is a **low-tens-of-billions** category
+overall, still optimized for anglophone, clean-script stacks — the gap SyRA targets.
+Sources (order-of-magnitude only):
+
+- WAF ~$6–9B (2024–25) — [EMR](https://www.researchandmarkets.com/reports/6112911/web-application-firewall-market-report-forecast) · [Fortune](https://www.fortunebusinessinsights.com/web-application-firewall-market-108841)
+- DLP ~$4.3B — [Stratview](https://www.stratviewresearch.com/market-reports/data-loss-prevention-market.html)
+- CASB ~$4.9B — [Grand View](https://www.grandviewresearch.com/horizon/statistics/cloud-security-market/solution/casb/global)
 
 ---
 
@@ -64,12 +80,17 @@ Scans return `tier_used` / `tier2_backend` / `normalised_input`.
 
 ### Eval honesty (headline)
 
-Fixed labeled set for this submission (**n=30**). UI: `/eval` · API: `GET /v1/eval/code-switch`.
+**Primary number is the fuller set (n=30).** n=30 is small — enough to
+show precision/recall/FPR and named misses, not a production benchmark.
+UI: `/eval` · API: `GET /v1/eval/code-switch`.
 
 | Set | n | Exact match | Precision | Recall | FPR |
 |---|---|---|---|---|---|
-| Hero click-path | **12** | **10/12 (83.3%)** | **1.00** | **0.90** | **0.00** |
-| Extended labeled set | **30** | **23/30 (76.7%)** | **1.00** | **0.78** | **0.00** |
+| **Labeled set (primary)** | **30** | **23/30 (76.7%)** | **1.00** | **0.78** | **0.00** |
+| Hero click-path (subset) | 12 | 10/12 (83.3%) | 1.00 | 0.90 | 0.00 |
+
+The n=12 row is the `/demo` walkthrough slice — convenient to click, not the
+headline. Leading with 83.3% would oversell; **76.7% on n=30 is the claim.**
 
 **What the misses show (this is the linguistic signal):** 7 misses cluster in two
 patterns — rare homograph substitutions and low-frequency Arabizi spellings outside
@@ -126,7 +147,8 @@ cd frontend/website && npm install && npm run dev
 ```
 
 Full steps: **[SETUP.md](SETUP.md)**. Auth: `Authorization: Bearer internal`.  
-Prefer localhost if a public deploy 502s.
+Prefer localhost if a public deploy 502s. If you cannot run SETUP, use the video
++ the n=30 table above as the verifiable artifacts.
 
 ---
 
@@ -146,8 +168,10 @@ Prefer localhost if a public deploy 502s.
 
 ## Pitch
 
-SyRA is an AI/ML security engine for **code-switching and confusable script** —
-Arabizi, Arabic-Indic digits, mixed script, IDN homographs — with a live eval that
-reports precision, recall, FPR, and **named linguistic misses**.
+SyRA is a **multilingual input-security** engine for **code-switching and confusable
+script** — Arabizi, Arabic-Indic digits, mixed script, IDN homographs — built as
+rule-based normalisation + lightweight classification (heuristics → TF-IDF; optional
+DistilBERT / LLM). Live eval reports precision, recall, FPR, and **named linguistic
+misses** on a small labeled set (n=30).
 
 **Next:** adversarial Arabizi mining to grow the labeled set past 30.
