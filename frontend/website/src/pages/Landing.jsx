@@ -305,9 +305,9 @@ export default function Landing() {
           </div>
           <div className="land-agent-card reveal" style={{ transitionDelay: "60ms" }}>
             <div className="land-agent-num">02</div>
-            <h3>Swarm Guard · Sybil (Web3-shaped)</h3>
+            <h3>Swarm Guard</h3>
             <p>
-              One actor pretending to be many — not a blockchain product. Burst detector
+              SyRA&apos;s Sybil-resistance layer — one feature. Burst detector
               (5 users / 30s) → SYBIL_SUSPECT; only role=analyst updates Bayesian priors;
               per-scan audit_hash binds agent_id (investigation trail is the chained hash).
             </p>
