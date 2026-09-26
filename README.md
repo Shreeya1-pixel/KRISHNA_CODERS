@@ -1,5 +1,5 @@
 # SyRA
-
+****VIDEO DEMO LINK** - https://drive.google.com/file/d/17ZsBSLqrz5cewd28SXtxZfPUBD_TFRZq/view?usp=drive_link
 **Hero demo (prefer localhost):** http://127.0.0.1:5174/demo · **API:** http://127.0.0.1:8001/docs  
 **Repo:** https://github.com/Shreeya1-pixel/KRISHNA_CODERS · **Run locally:** [SETUP.md](SETUP.md)
 
