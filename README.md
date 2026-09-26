@@ -96,6 +96,7 @@ Spend attention here *after* `/demo` + `/eval`:
 | `/visual` | See a homograph catch as an annotated screenshot (URL or GitHub) |
 | `/chat` | Same Tier-1+2 engine, depth by role; optional prepared generic-LLM foil — **not** a “beat ChatGPT” claim; shows why generic LLMs need a purpose-built pre-processing layer |
 | `/erp-demo` · `/erp-sap-stub` | Same scan API in ERP-shaped hosts |
+| `/logs` · **Jira escalation** | WARN/BLOCK results can auto-file a ticket (env-var gated: `JIRA_*`) |
 | `/workflow` | Compose detection pipelines without editing models |
 | `/app` | Live path strip (which tiers are up) |
 
