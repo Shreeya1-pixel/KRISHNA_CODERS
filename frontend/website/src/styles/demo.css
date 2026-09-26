@@ -1,0 +1,328 @@
+/* Code-switch demo + Field/Glare Mode (Theme 03) */
+
+.cs-demo {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.cs-hero {
+  margin-bottom: 28px;
+}
+
+.cs-eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--safeo-muted, #6b7280);
+  margin: 0 0 8px;
+}
+
+.cs-hero h2 {
+  margin: 0 0 10px;
+  font-size: 28px;
+  line-height: 1.2;
+}
+
+.cs-sub {
+  margin: 0 0 8px;
+  color: var(--safeo-muted, #6b7280);
+  font-size: 15px;
+  max-width: 640px;
+}
+
+.cs-meta {
+  font-size: 12px;
+  color: var(--safeo-muted, #6b7280);
+}
+
+.cs-samples h3,
+.cs-result-panel h3 {
+  margin: 0 0 12px;
+  font-size: 16px;
+}
+
+.cs-sample-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.cs-sample-btn {
+  text-align: left;
+  border: 2px solid var(--safeo-border, #e5e7eb);
+  background: #fff;
+  border-radius: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+  min-height: 96px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.cs-sample-btn:hover:not(:disabled),
+.cs-sample-btn.active {
+  border-color: #111827;
+  background: #f9fafb;
+}
+
+.cs-sample-btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.cs-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #b45309;
+}
+
+.cs-sample-btn.label-clean .cs-label { color: #166534; }
+.cs-sample-btn.label-homograph .cs-label { color: #7c3aed; }
+.cs-sample-btn.label-mixed_script .cs-label { color: #0369a1; }
+.cs-sample-btn.label-arabic_digits .cs-label { color: #be123c; }
+
+.cs-payload {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  word-break: break-word;
+  color: #111827;
+  flex: 1;
+}
+
+.cs-expect {
+  font-size: 11px;
+  color: var(--safeo-muted, #6b7280);
+}
+
+.cs-result-panel {
+  border: 1px solid var(--safeo-border, #e5e7eb);
+  border-radius: 12px;
+  padding: 20px;
+  background: #fafafa;
+}
+
+.cs-pipeline {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.cs-step-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--safeo-muted, #6b7280);
+  margin-bottom: 6px;
+}
+
+.cs-step code {
+  display: block;
+  padding: 10px 12px;
+  background: #fff;
+  border: 1px solid var(--safeo-border, #e5e7eb);
+  border-radius: 8px;
+  font-size: 13px;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.cs-verdict {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 140px;
+  min-height: 56px;
+  padding: 12px 28px;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  border-radius: 10px;
+  color: #fff;
+}
+
+.cs-verdict.allow { background: #166534; }
+.cs-verdict.warn { background: #b45309; }
+.cs-verdict.block { background: #991b1b; }
+
+.cs-score {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--safeo-muted, #6b7280);
+}
+
+.cs-patterns {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 13px;
+}
+
+.cs-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.cs-action {
+  position: relative;
+  min-height: 56px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.cs-action.allow { background: #dcfce7; color: #166534; }
+.cs-action.warn { background: #fef3c7; color: #92400e; }
+.cs-action.block { background: #fee2e2; color: #991b1b; }
+.cs-action:disabled:not(.hold-confirm) { opacity: 0.45; cursor: default; }
+.cs-action.hold-confirm { background: #991b1b; color: #fff; }
+.cs-action.hold-confirm.done { background: #7f1d1d; }
+
+.hold-fill {
+  position: absolute;
+  inset: 0;
+  transform-origin: left center;
+  transform: scaleX(0);
+  background: rgba(255, 255, 255, 0.25);
+  pointer-events: none;
+}
+
+.hold-label {
+  position: relative;
+  z-index: 1;
+}
+
+.cs-confirmed {
+  color: #991b1b;
+  font-weight: 600;
+  font-size: 14px;
+  margin: 0;
+}
+
+.cs-loading,
+.cs-empty {
+  color: var(--safeo-muted, #6b7280);
+}
+
+.cs-error {
+  color: #991b1b;
+  font-weight: 600;
+}
+
+/* ── Glare / Field Mode (Theme 03) ─────────────────────────────────────────── */
+.glare-toggle {
+  border: 2px solid #111827;
+  background: #fff;
+  color: #111827;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 40px;
+  white-space: nowrap;
+}
+
+.glare-toggle.active {
+  background: #facc15;
+  border-color: #000;
+  color: #000;
+}
+
+html[data-glare="on"] {
+  --safeo-red: #000000;
+  --safeo-border: #000000;
+  --safeo-text: #000000;
+  --safeo-muted: #111111;
+  --safeo-green-bg: #ffff00;
+  --safeo-green-text: #000000;
+}
+
+html[data-glare="on"] body,
+html[data-glare="on"] .safeo-app,
+html[data-glare="on"] .safeo-header,
+html[data-glare="on"] .safeo-main,
+html[data-glare="on"] .cs-result-panel,
+html[data-glare="on"] .cs-sample-btn,
+html[data-glare="on"] .cs-step code {
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+
+html[data-glare="on"] body {
+  font-size: 18px;
+}
+
+html[data-glare="on"] .safeo-nav-link,
+html[data-glare="on"] .cs-hero h2,
+html[data-glare="on"] .safeo-page-header h2 {
+  font-size: 1.25em;
+  font-weight: 800;
+  color: #000 !important;
+}
+
+html[data-glare="on"] .cs-verdict {
+  font-size: 36px;
+  min-height: 64px;
+  border: 3px solid #000;
+}
+
+html[data-glare="on"] .cs-verdict.allow {
+  background: #ffff00;
+  color: #000;
+}
+
+html[data-glare="on"] .cs-verdict.warn {
+  background: #000;
+  color: #ffff00;
+}
+
+html[data-glare="on"] .cs-verdict.block {
+  background: #000;
+  color: #fff;
+  outline: 4px solid #ffff00;
+}
+
+html[data-glare="on"] .cs-sample-btn,
+html[data-glare="on"] .cs-action,
+html[data-glare="on"] .glare-toggle,
+html[data-glare="on"] .sim-run-btn,
+html[data-glare="on"] .safeo-nav-link {
+  min-height: 56px;
+  border-width: 3px;
+  font-size: 16px;
+}
+
+html[data-glare="on"] .cs-sample-btn {
+  border-color: #000;
+}
+
+html[data-glare="on"] .cs-label,
+html[data-glare="on"] .cs-expect,
+html[data-glare="on"] .cs-sub,
+html[data-glare="on"] .cs-meta,
+html[data-glare="on"] .safeo-muted,
+html[data-glare="on"] .safeo-engine-label {
+  color: #000 !important;
+}
+
+html[data-glare="on"] .land {
+  background: #fff !important;
+  color: #000 !important;
+}
+
+@media (max-width: 640px) {
+  .cs-actions {
+    grid-template-columns: 1fr;
+  }
+}
