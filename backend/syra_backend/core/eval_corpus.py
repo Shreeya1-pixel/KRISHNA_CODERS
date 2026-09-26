@@ -1,5 +1,5 @@
 """
-Extended labeled eval set for Theme 01 — beyond the 12 hero click-path samples.
+Extended labeled eval set for Theme 01 — beyond the 13 hero click-path samples.
 
 Hero samples stay in demo_corpus.py (UI one-click). This module adds more
 labeled strings so README can report metrics with n > 12 without pretending

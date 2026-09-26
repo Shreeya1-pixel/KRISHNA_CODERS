@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { fetchCodeSwitchEval, fetchBackendHealth } from "../api";
 
 /**
- * Live Theme-01 eval harness — runs n≥12 (extended n=30) against the engine
+ * Live Theme-01 eval harness — runs n≥13 (extended n=31) against the engine
  * and shows precision / recall / FPR a judge can refresh in-browser.
  */
 export default function EvalLab() {

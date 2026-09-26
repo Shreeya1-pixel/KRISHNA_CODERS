@@ -20,11 +20,11 @@ not an edge case:
 ọpen-ạccess.com        → script-borrowing / IDN homograph
 ```
 
-Normalization runs **before** pattern matching. The click-path corpus is **12**
-samples (`GET /v1/demo/code-switch`). Demo-corpus eval (n=12): attack-detection
-precision **1.00**, recall **0.90**, FPR **0.00**, exact match **83.3%** — label
+Normalization runs **before** pattern matching. The click-path corpus is **13**
+samples (`GET /v1/demo/code-switch`). Demo-corpus eval (n=13): attack-detection
+precision **1.00**, recall **0.82**, FPR **0.00**, exact match **76.9%** — label
 these as corpus numbers, not a production benchmark. Keep off-corpus strings
-ready to type live (see README).
+ready to type live (see README). Full labeled set is **n=31 / 74.2%** exact.
 
 ### 02 — Sybil resistance under agent swarms (trust / Web3-shaped)
 

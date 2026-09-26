@@ -79,21 +79,22 @@ Scans return `tier_used` / `tier2_backend` / `normalised_input`.
 
 ### Eval honesty (headline)
 
-**Primary number is the fuller set (n=30).** n=30 is small — enough to
+**Primary number is the fuller set (n=31).** n=31 is small — enough to
 show precision/recall/FPR and named misses, not a production benchmark.
 UI: `/eval` · API: `GET /v1/eval/code-switch`.
 
 | Set | n | Exact match | Precision | Recall | FPR |
 |---|---|---|---|---|---|
-| **Labeled set (primary)** | **30** | **23/30 (76.7%)** | **1.00** | **0.78** | **0.00** |
-| Hero click-path (subset) | 12 | 10/12 (83.3%) | 1.00 | 0.90 | 0.00 |
+| **Labeled set (primary)** | **31** | **23/31 (74.2%)** | **1.00** | **0.79** | **0.00** |
+| Hero click-path (subset) | 13 | 10/13 (76.9%) | 1.00 | 0.82 | 0.00 |
 
-The n=12 row is the `/demo` walkthrough slice — convenient to click, not the
-headline. Leading with 83.3% would oversell; **76.7% on n=30 is the claim.**
+The n=13 row is the `/demo` walkthrough slice — convenient to click, not the
+headline. Leading with the hero rate would oversell; **74.2% on n=31 is the claim.**
 
-**What the misses show (this is the linguistic signal):** 7 misses cluster in two
+**What the misses show (this is the linguistic signal):** 8 misses cluster in two
 patterns — rare homograph substitutions and low-frequency Arabizi spellings outside
-Tier-1 lexicons. Those are Tier-2/LLM-tier gaps, **not** normalisation failures.
+Tier-1 lexicons (plus one gray-zone WARN expected as advisory). Those are
+Tier-2/LLM-tier gaps, **not** normalisation failures.
 Examples kept in the set:
 
 ```text
@@ -102,7 +103,7 @@ edini db dump 3shan audit            → low-frequency Arabizi edge
 homograph path tricks / rare glyphs  → same class of miss
 ```
 
-We keep them rather than cherry-picking the eval. Growing past n=30 (adversarial
+We keep them rather than cherry-picking the eval. Growing past n=31 (adversarial
 Arabizi mining) is explicit roadmap.
 
 ---
@@ -157,12 +158,12 @@ Prefer localhost if a public deploy 502s.
 | Feature | Status |
 |---|---|
 | Multilingual normalisation + `/demo` (digits / IDN first) | ✅ **core** |
-| Live eval `/eval` (n=30, kept misses) | ✅ **core** |
+| Live eval `/eval` (n=31, kept misses) | ✅ **core** |
 | Tier-2 TF-IDF / pure-Python (no key) | ✅ |
 | `/visual` · `/chat` · ERP stubs · `/workflow` | ✅ supporting |
 | Jira escalation | ✅ when `JIRA_*` env vars set |
 | Tier-3 LLM | Off by default |
-| Eval growth past n=30 | Roadmap |
+| Eval growth past n=31 | Roadmap |
 
 ---
 
@@ -172,6 +173,6 @@ SyRA is a **multilingual input-security** engine for **code-switching and confus
 script** — Arabizi, Arabic-Indic digits, mixed script, IDN homographs — built as
 rule-based normalisation + lightweight classification (heuristics → TF-IDF; optional
 DistilBERT / LLM). Live eval reports precision, recall, FPR, and **named linguistic
-misses** on a small labeled set (n=30).
+misses** on a small labeled set (n=31).
 
-**Next:** adversarial Arabizi mining to grow the labeled set past 30.
+**Next:** adversarial Arabizi mining to grow the labeled set past 31.
