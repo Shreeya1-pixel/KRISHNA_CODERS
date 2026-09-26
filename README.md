@@ -19,6 +19,12 @@ Existing WAF/DLP tools assume clean, monolingual, desktop input; SyRA is the lay
 enterprise input that doesn't meet those assumptions — Gulf/MENA enterprise text,
 agentic traffic, and field-deployed staff.
 
+**Market:** Enterprise input-security tooling is a multi-billion-dollar category (WAF, DLP,
+CASB), but it's built for anglophone, desktop-first enterprises. Gulf/MENA enterprises —
+code-switching staff, agentic API traffic, field-deployed compliance teams — are
+underserved by that assumption. SyRA targets that gap as an API layer any ERP stack can
+adopt without a rip-and-replace.
+
 **Three answers, upfront:**
 
 - **Swarm Guard** (our Sybil-resistance layer) = burst fingerprint + `role=analyst` RBAC on
@@ -31,6 +37,40 @@ agentic traffic, and field-deployed staff.
 Theme 1 ships the deepest evidence because it's the hero flow; Themes 2 and 3
 (Swarm Guard, Field Mode) are deliberately lighter-weight decision-plane interventions —
 breadth over depth was the design choice for those themes.
+
+---
+
+## Tech stack
+
+| Layer | Stack |
+|---|---|
+| API | FastAPI · Uvicorn · Pydantic |
+| Scoring | Heuristics → TF-IDF / DistilBERT → optional LLM (graceful fallback) |
+| Multilingual | Arabizi / Arabic-digit / mixed-script normalisation |
+| Agents | Local LangGraph-style graph (5 specialists) |
+| Audit | Per-scan SHA-256 `audit_hash` · investigation `prev_hash` chain |
+| Adaptation | Bayesian thresholds (SQLite) · LoRA controller |
+| Frontend | React · Vite |
+| ERP demos | Demo ERP (`/erp-demo`) · SAP webhook stub (`/erp-sap-stub`) |
+
+No OpenAI key required for the default path.
+
+## Setup
+
+**Requirements:** Python 3.11 · Node 18+. Full steps and layout: **[SETUP.md](SETUP.md)**.
+
+```bash
+# Backend (:8001)
+cd backend && python3.11 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt && cp ../.env.example .env
+export PYTHONPATH="$(pwd)"
+uvicorn syra_backend.main:app --host 127.0.0.1 --port 8001 --reload
+
+# Frontend (:5174) — other terminal
+cd frontend/website && npm install && npm run dev
+```
+
+Open http://127.0.0.1:5174/demo · Auth: `Authorization: Bearer internal`.
 
 ---
 
@@ -217,7 +257,7 @@ Ops UI adaptation, not a climate sensor. Toggle works even if the API is down.
 
 Auth: `Authorization: Bearer internal` (or any key in `SYRA_API_KEYS`).
 
-Stack, clone, and run steps: **[SETUP.md](SETUP.md)**.
+More clone / env / layout detail: **[SETUP.md](SETUP.md)**.
 
 ---
 
