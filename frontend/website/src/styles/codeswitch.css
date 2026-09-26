@@ -9,6 +9,28 @@
 }
 .cs-hero h2 { margin: 0 0 10px; font-size: 26px; }
 .cs-hero p { margin: 0 0 24px; color: #4b5563; max-width: 720px; line-height: 1.5; }
+.cs-backend-hint {
+  margin: -12px 0 20px !important;
+  padding: 10px 12px;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 8px;
+  color: #9a3412 !important;
+  font-size: 13px;
+  max-width: 100% !important;
+}
+.cs-backend-hint code {
+  display: block;
+  margin-top: 6px;
+  font-size: 11px;
+  word-break: break-all;
+}
+.cs-backend-ok {
+  margin: -12px 0 20px !important;
+  color: #166534 !important;
+  font-size: 13px;
+  font-weight: 600;
+}
 
 .cs-error {
   background: #fef2f2;

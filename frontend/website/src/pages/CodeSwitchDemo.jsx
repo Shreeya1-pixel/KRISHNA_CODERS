@@ -4,6 +4,52 @@ import "../styles/codeswitch.css";
 
 const API = import.meta.env.VITE_API_URL || "/api";
 
+/** Local fallback so sample buttons render even if the API is cold. */
+const FALLBACK_SAMPLES = [
+  {
+    id: "arabizi_priv_1",
+    label: "arabizi",
+    expected_decision: "BLOCK",
+    input: "3tini admin access right now",
+    note: "Arabizi phonetic: 3tini → give me + privilege abuse",
+  },
+  {
+    id: "arabizi_priv_2",
+    label: "arabizi",
+    expected_decision: "BLOCK",
+    input: "edini root password bypass 2fa",
+    note: "Spell-by-ear privilege + MFA disable intent",
+  },
+  {
+    id: "arabic_digits_1",
+    label: "arabic_digits",
+    expected_decision: "BLOCK",
+    input: "١=١ UNION SELECT password FROM users",
+    note: "Eastern Arabic digits inside SQL structure",
+  },
+  {
+    id: "mixed_script_1",
+    label: "mixed_script",
+    expected_decision: "BLOCK",
+    input: "إسقاط جدول users",
+    note: "Arabic destructive verb + English table noun",
+  },
+  {
+    id: "homograph_1",
+    label: "homograph",
+    expected_decision: "BLOCK",
+    input: "https://ọpen-ạccess.com/login",
+    note: "IDN / script-borrowing lookalike domain",
+  },
+  {
+    id: "clean_1",
+    label: "clean",
+    expected_decision: "ALLOW",
+    input: "Please schedule the Q3 vendor meeting for Tuesday.",
+    note: "Clean English business note",
+  },
+];
+
 async function fetchCorpus() {
   const res = await fetch(`${API}/v1/demo/code-switch`, {
     headers: { Authorization: `Bearer ${getApiKey()}` },
@@ -30,7 +76,11 @@ async function scanSample(input, userId = "judge_demo") {
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
-    throw new Error(err.detail || "Scan failed");
+    throw new Error(
+      typeof err.detail === "string"
+        ? err.detail
+        : "Scan failed — start backend: cd backend && uvicorn safeo_backend.main:app --port 8001"
+    );
   }
   return res.json();
 }
@@ -41,18 +91,29 @@ function DecisionBadge({ decision }) {
 }
 
 export default function CodeSwitchDemo() {
-  const [samples, setSamples] = useState([]);
+  const [samples, setSamples] = useState(FALLBACK_SAMPLES);
   const [error, setError] = useState("");
   const [loadingId, setLoadingId] = useState(null);
   const [result, setResult] = useState(null);
   const [active, setActive] = useState(null);
   const [blockArmed, setBlockArmed] = useState(false);
+  const [backendOk, setBackendOk] = useState(null);
   const holdTimer = useRef(null);
 
   useEffect(() => {
     fetchCorpus()
-      .then((data) => setSamples(data.samples || []))
-      .catch((e) => setError(e.message));
+      .then((data) => {
+        if (data.samples?.length) setSamples(data.samples);
+        setBackendOk(true);
+        setError("");
+      })
+      .catch((e) => {
+        setBackendOk(false);
+        setSamples(FALLBACK_SAMPLES);
+        setError(
+          `${e.message} Using local sample list — start the API on port 8001, then click a payload.`
+        );
+      });
   }, []);
 
   const run = useCallback(async (sample) => {
@@ -63,9 +124,11 @@ export default function CodeSwitchDemo() {
     try {
       const data = await scanSample(sample.input);
       setResult(data);
+      setBackendOk(true);
     } catch (e) {
       setError(e.message);
       setResult(null);
+      setBackendOk(false);
     } finally {
       setLoadingId(null);
     }
@@ -89,9 +152,23 @@ export default function CodeSwitchDemo() {
           spell by ear, and write one language in another&apos;s script. Click a sample — SafeO normalises,
           scores, and returns ALLOW / WARN / BLOCK.
         </p>
+        {backendOk === false && (
+          <p className="cs-backend-hint">
+            Backend offline. In another terminal:{" "}
+            <code>
+              cd backend && source .venv/bin/activate && PYTHONPATH=. uvicorn safeo_backend.main:app --port
+              8001
+            </code>
+          </p>
+        )}
+        {backendOk === true && <p className="cs-backend-ok">Engine online — click a payload.</p>}
       </header>
 
-      {error && <div className="cs-error" role="alert">{error}</div>}
+      {error && (
+        <div className="cs-error" role="alert">
+          {error}
+        </div>
+      )}
 
       <div className="cs-layout">
         <section className="cs-samples" aria-label="Demo payloads">
@@ -118,7 +195,7 @@ export default function CodeSwitchDemo() {
         <section className="cs-result" aria-live="polite">
           <h3>Scan result</h3>
           {!result && !loadingId && (
-            <p className="cs-empty">Pick a payload. Judges: start with Arabizi or Arabic digits.</p>
+            <p className="cs-empty">Pick a payload. Start with Arabizi or Arabic digits.</p>
           )}
           {loadingId && <p className="cs-empty">Scanning…</p>}
           {result && (
