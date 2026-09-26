@@ -26,10 +26,11 @@ call `POST /v1/scan` can be protected:
 | WhatsApp / Telegram bots | Message pre-processing |
 | Web forms | Backend validation layer |
 
-**For this demo we connected SafeO to Odoo** — the open-source ERP module lives in
-`frontend/odoo_module/`. Odoo intercepts form submissions and asks SafeO before
-writing to the database. That is a **demo host**, not the product boundary.
-Point the same API at SAP, Oracle, or your own stack with one API key.
+**For this demo we connected SafeO to a demo ERP host** (module under
+`frontend/odoo_module/` — a sample ERP adapter). The demo ERP intercepts form
+submissions and asks SafeO before writing to the database. That is a **demo
+vehicle**, not the product boundary. Point the same API at SAP, Oracle, or your
+own stack with one API key.
 
 ---
 
@@ -38,7 +39,7 @@ Point the same API at SAP, Oracle, or your own stack with one API key.
 | # | Domain problem | What SafeO ships |
 |---|---|---|
 | **01** | Code-switching & spelling by ear | **Hero:** `/demo` + `GET /v1/demo/code-switch` — MultilingualAgent normalises Arabizi / Arabic digits / mixed script **before** Tier-1 patterns |
-| **02** | Sybil resistance under agent swarms | Burst detector (`SYBIL_SUSPECT`), stake-gated Bayesian feedback (`role=analyst`), `agent_id` in SHA-256 audit hash |
+| **02** | Sybil resistance under agent swarms | **Swarm Guard** — burst detector (`SYBIL_SUSPECT`), stake-gated Bayesian feedback (`role=analyst`), `agent_id` in SHA-256 audit hash |
 | **03** | Built for a quiet room, used in the sun | **Glare Mode** toggle — extreme contrast, oversized targets, hold-to-confirm on BLOCK |
 
 **Judge path (5 minutes):** start backend + frontend → open `/demo` → click Arabizi + Arabic-digit samples → toggle **Glare Mode**.
@@ -74,7 +75,7 @@ Point the same API at SAP, Oracle, or your own stack with one API key.
 | Adaptation | **Bayesian** Beta thresholds (SQLite) + **LoRA** fine-tune controller |
 | Optional LLM | Any OpenAI-compatible endpoint (vLLM / cloud) — **not required** |
 | Frontend | React + Vite |
-| ERP demo host | Odoo module (`frontend/odoo_module/`) |
+| Demo ERP host | Sample ERP adapter (`frontend/odoo_module/`) |
 
 ### No OpenAI keys required
 
@@ -98,7 +99,7 @@ Set `SAFEO_API_KEYS=internal` and scan. Optional LLM is an upgrade, not a depend
 | Jira escalation from Logs | ✅ when env vars set |
 | Workflow Builder UI | ✅ local persistence |
 | Visual evidence (Playwright) | ✅ when Chromium deps installed |
-| Odoo module as demo ERP host | ✅ when Odoo is running |
+| Demo ERP module as host | ✅ when the demo ERP is running |
 
 ### Partial / needs config
 
@@ -107,7 +108,7 @@ Set `SAFEO_API_KEYS=internal` and scan. Optional LLM is an upgrade, not a depend
 | Optional agent LLM | Needs an OpenAI-compatible URL + key; otherwise deterministic agents |
 | Tier-2 DistilBERT | Needs Torch + weights; TF-IDF fallback otherwise |
 | LoRA training run | Controller present; needs a GPU host to actually train |
-| Live Odoo inject | Needs Odoo + module installed |
+| Live demo-ERP inject | Needs the demo ERP process + module installed |
 | Public free-tier deploy | May sleep / 502 — **prefer localhost for judging** |
 
 ### Not claimed
@@ -184,7 +185,7 @@ backend/
     routes/           # /v1/scan, feedback, logs, visual, …
 frontend/
   website/            # React UI (/demo, Glare, chat, visual, workflow)
-  odoo_module/        # Odoo ERP demo integration (any ERP can call the same API)
+  odoo_module/        # Demo ERP adapter (any ERP can call the same API)
 docs/
 .env.example
 ```
@@ -203,11 +204,18 @@ https://ọpen-ạccess…   → IDN / script-borrow → BLOCK
 
 ---
 
-## Sybil / stake (Theme 02)
+## Swarm Guard — Sybil resistance (Theme 02)
+
+**Name:** In security and Web3, a **Sybil attack** means one actor pretending to be
+many. That is exactly the hackathon problem (“acting as ten thousand costs almost
+nothing”). SafeO’s product name for the countermeasure is **Swarm Guard**; the
+flag in APIs/logs stays `SYBIL_SUSPECT` so judges recognise the standard term.
 
 - Same payload from ≥5 distinct `user_id`s in 30s → `sybil_suspect: true`
 - Anonymous feedback is quarantined; `role=analyst` updates Bayesian priors
 - `audit_hash` includes `agent_id`
+
+This is Sybil resistance for the **security decision plane**, not a crypto wallet.
 
 ---
 
@@ -223,7 +231,7 @@ Header **Glare** toggle → extreme contrast, large targets, hold-to-confirm on 
 |---|---|---|
 | POST | `/v1/scan` | Score one input |
 | GET | `/v1/demo/code-switch` | Hero corpus |
-| GET | `/v1/sybil/stats` | Swarm detector stats |
+| GET | `/v1/sybil/stats` | Swarm Guard / Sybil detector stats |
 | POST | `/v1/feedback` | Stake-gated human feedback |
 | GET | `/v1/health` | Health |
 
@@ -233,4 +241,4 @@ Auth: `Authorization: Bearer internal` (or any key in `SAFEO_API_KEYS`).
 
 ## One-line pitch
 
-SafeO blocks malicious enterprise input when language is messy, actors are swarming, and the human logging the decision is standing in the sun — and it plugs into **any ERP**; this demo uses Odoo.
+SafeO blocks malicious enterprise input when language is messy, actors are swarming, and the human logging the decision is standing in the sun — and it plugs into **any ERP**; this build ships a **demo ERP** adapter as the sample host.

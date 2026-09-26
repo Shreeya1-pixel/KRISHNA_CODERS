@@ -72,7 +72,7 @@ export default function Connect() {
   }, []);
 
   const openOdoo = () => {
-    showToast("Opening SafeO in Odoo...");
+    showToast("Opening SafeO in Demo ERP...");
     window.open(ODOO_SAFEO_URL, "_blank", "noopener,noreferrer");
   };
 
@@ -109,14 +109,14 @@ export default function Connect() {
 
       <div className="safeo-erp-grid">
         <ErpCard
-          icon="Od"
-          name="Odoo"
+          icon="ERP"
+          name="Demo ERP"
           status={odooUp ? "● Connected" : "○ Not running"}
           statusClass={odooUp ? "connected" : "idle"}
           primary={
             odooUp ? (
               <button type="button" className="sim-run-btn" onClick={openOdoo}>
-                Open SafeO in Odoo →
+                Open SafeO in Demo ERP →
               </button>
             ) : (
               <button type="button" className="sim-run-btn" onClick={() => setSetupOpen(true)}>
@@ -127,7 +127,7 @@ export default function Connect() {
           secondary={
             odooUp ? (
               <Link to="/logs?source=odoo" className="safeo-btn-muted">
-                View Odoo logs
+                View demo ERP logs
               </Link>
             ) : null
           }
@@ -138,7 +138,7 @@ export default function Connect() {
               <p>Blocked today: {odooMetrics.blockedToday}</p>
             </>
           ) : (
-            <p className="safeo-muted">Start Odoo to connect</p>
+            <p className="safeo-muted">Start the demo ERP host to connect</p>
           )}
         </ErpCard>
 
@@ -199,8 +199,8 @@ export default function Connect() {
         </ErpCard>
       </div>
 
-      <Modal open={setupOpen} title="Start Odoo" onClose={() => setSetupOpen(false)}>
-        <p className="safeo-muted">Run these commands from your Odoo install directory:</p>
+      <Modal open={setupOpen} title="Start Demo ERP" onClose={() => setSetupOpen(false)}>
+        <p className="safeo-muted">Run these commands from your demo ERP install directory:</p>
         <pre className="safeo-code">{ODOO_SETUP}</pre>
         <p className="safeo-muted">Then open <a href={ODOO_SAFEO_URL} target="_blank" rel="noreferrer">{ODOO_SAFEO_URL}</a></p>
       </Modal>

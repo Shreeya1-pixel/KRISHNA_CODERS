@@ -203,7 +203,7 @@ export default function CodeSwitchDemo() {
               <div className="cs-verdict-row">
                 <DecisionBadge decision={result.decision} />
                 <span className="cs-score">{Math.round((result.risk_score || 0) * 100)}% risk</span>
-                {result.sybil_suspect && <span className="cs-sybil">SYBIL_SUSPECT</span>}
+                {result.sybil_suspect && <span className="cs-sybil">SWARM · SYBIL</span>}
               </div>
 
               {(result.decision || "").toUpperCase() === "BLOCK" && (

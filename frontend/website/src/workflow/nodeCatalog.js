@@ -15,7 +15,7 @@ export const NODE_CATALOG = [
   { id: "start", category: "control", label: "Start", subtitle: "Pipeline entry", status: "real", color: "#22c55e", fixed: false },
   { id: "end", category: "control", label: "End", subtitle: "Pipeline exit", status: "real", color: "#ef4444", fixed: false },
 
-  { id: "erp_form", category: "input", label: "ERP form", subtitle: "Odoo field values at point of entry", status: "real", color: "#3b82f6" },
+  { id: "erp_form", category: "input", label: "ERP form", subtitle: "Demo ERP field values at point of entry", status: "real", color: "#3b82f6" },
   { id: "api_payload", category: "input", label: "API payload", subtitle: "JSON / REST request body", status: "real", color: "#3b82f6" },
   { id: "whatsapp_message", category: "input", label: "WhatsApp message", subtitle: "WhatsApp Business text", status: "real", color: "#3b82f6" },
   { id: "website_input", category: "input", label: "Website input", subtitle: "Web form fields", status: "real", color: "#3b82f6" },
@@ -47,7 +47,7 @@ export const NODE_CATALOG = [
   { id: "pdf_report", category: "output", label: "PDF report", subtitle: "Evidence · MITRE · remediation · audit hash", status: "new", color: "#0d9488", locked: true },
   { id: "whatsapp_reply", category: "output", label: "WhatsApp reply", subtitle: "Safe reply on BLOCK for WA sources", status: "real", color: "#22c55e" },
   { id: "human_review", category: "output", label: "Human review queue", subtitle: "WARN held for analyst approve/reject", status: "real", color: "#2563eb" },
-  { id: "erp_block", category: "output", label: "ERP block", subtitle: "Stop transaction before Odoo persistence", status: "real", color: "#dc2626" },
+  { id: "erp_block", category: "output", label: "ERP block", subtitle: "Stop transaction before demo ERP persistence", status: "real", color: "#dc2626" },
   { id: "slack_alert", category: "output", label: "Slack alert", subtitle: "Webhook on WARN / BLOCK", status: "new", color: "#f97316", locked: true },
   { id: "jira_ticket", category: "output", label: "Jira ticket", subtitle: "Auto-create SEC ticket", status: "mock", color: "#6366f1", locked: true },
   { id: "siem_export", category: "output", label: "SIEM export", subtitle: "OTEL / Splunk forward", status: "mock", color: "#78716c", locked: true },

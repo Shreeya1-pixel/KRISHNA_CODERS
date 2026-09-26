@@ -63,5 +63,5 @@ Hostile field UI      →  Glare Mode lets exhausted humans still log correctly
 
 One product. Three domains. Same ALLOW / WARN / BLOCK spine.
 
-**Demo integration:** Odoo ERP is the host for the live demo — not the product
+**Demo integration:** A demo ERP host is wired for the live demo — not the product
 boundary. Any platform that can call `POST /v1/scan` is in scope.

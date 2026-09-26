@@ -117,7 +117,7 @@ export function ErpManagerView({ scan }) {
         {hasErp
           ? "This memo matches ERP fraud or policy-risk indicators."
           : scan.decision === "BLOCK"
-            ? "This content is too risky to persist in Odoo without analyst review."
+            ? "This content is too risky to persist in the demo ERP without analyst review."
             : "No critical ERP fraud signals in this memo."}
       </p>
       <div className="cb-erp-grid">

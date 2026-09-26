@@ -109,7 +109,7 @@ It is specifically engineered against three failure modes of modern systems:
 2. **Cheap multiplicity** — agent swarms that look like many humans (Sybil / Web3 problem).
 3. **Hostile environments** — compliance UIs used in glare, heat, and fatigue (Web problem).
 
-Odoo is the demo host. The product is the decision plane.
+A demo ERP is the sample host. The product is the decision plane.
 
 ---
 

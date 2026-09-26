@@ -304,10 +304,10 @@ export default function Landing() {
           </div>
           <div className="land-agent-card reveal" style={{ transitionDelay: "60ms" }}>
             <div className="land-agent-num">02</div>
-            <h3>Sybil under swarms (Web3-shaped)</h3>
+            <h3>Swarm Guard · Sybil (Web3-shaped)</h3>
             <p>
-              Burst fingerprint detector → SYBIL_SUSPECT. Stake-gated Bayesian feedback.
-              Agent attestation into the SHA-256 checkpoint chain.
+              One actor pretending to be many. Burst fingerprint detector → SYBIL_SUSPECT.
+              Stake-gated Bayesian feedback. Agent attestation into the SHA-256 chain.
             </p>
           </div>
           <div className="land-agent-card reveal" style={{ transitionDelay: "120ms" }}>

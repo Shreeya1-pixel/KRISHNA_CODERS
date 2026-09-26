@@ -48,7 +48,7 @@ export default function Dashboard() {
     <div className="safeo-page">
       <div className="safeo-page-header">
         <h2>Business Risk Dashboard</h2>
-        <p>Real-time business risk decisions — standalone view. Connect to Odoo for full ERP integration.</p>
+        <p>Real-time business risk decisions — standalone view. Connect a demo ERP for full ERP integration.</p>
       </div>
 
       <div className="safeo-stat-grid">
@@ -69,7 +69,7 @@ export default function Dashboard() {
       <div className="safeo-card">
         <h3>Recent Decisions</h3>
         {!stats?.recent_decisions?.length ? (
-          <p className="safeo-muted">No decisions yet. Run a scan from Sandbox or connect Odoo.</p>
+          <p className="safeo-muted">No decisions yet. Run a scan from /demo or connect a demo ERP.</p>
         ) : (
           <table className="safeo-table">
             <thead>
@@ -99,7 +99,7 @@ export default function Dashboard() {
       <div className="safeo-dashboard-footer">
         <div className="safeo-status-strip">
           <span>Backend API: {stats ? "Connected" : "Checking…"}</span>
-          <span>Odoo ERP: {odooUp ? "Connected" : "Not running"}</span>
+          <span>Demo ERP: {odooUp ? "Connected" : "Not running"}</span>
         </div>
       </div>
     </div>
