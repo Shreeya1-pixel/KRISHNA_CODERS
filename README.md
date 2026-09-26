@@ -138,6 +138,7 @@ Prefer localhost if a public deploy 502s.
 | Live eval `/eval` (n=30, kept misses) | ✅ **core** |
 | Tier-2 TF-IDF / pure-Python (no key) | ✅ |
 | `/visual` · `/chat` · ERP stubs · `/workflow` | ✅ supporting |
+| Jira escalation | ✅ when `JIRA_*` env vars set |
 | Tier-3 LLM | Off by default |
 | Eval growth past n=30 | Roadmap |
 
