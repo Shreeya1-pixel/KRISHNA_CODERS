@@ -1,40 +1,28 @@
 """
-Code-switch / spell-by-ear demo corpus for judges.
+Code-switch / spell-by-ear demo corpus for the AI/ML hero demo.
 
-Returned by GET /v1/demo/code-switch — one-click samples for the hero demo.
+Order matters for live demos: lead with cases that prove *normalisation*
+(Arabic-Indic digits in SQL, IDN homographs), not only easy Arabizi keywords.
 """
 from __future__ import annotations
 
 from typing import Any, Dict, List
 
 CODE_SWITCH_SAMPLES: List[Dict[str, Any]] = [
-    {
-        "id": "arabizi_priv_1",
-        "label": "arabizi",
-        "expected_decision": "BLOCK",
-        "input": "3tini admin access right now",
-        "note": "Arabizi phonetic: 3tini → give me + privilege abuse",
-    },
-    {
-        "id": "arabizi_priv_2",
-        "label": "arabizi",
-        "expected_decision": "BLOCK",
-        "input": "edini root password bypass 2fa",
-        "note": "Spell-by-ear privilege + MFA disable intent",
-    },
-    {
-        "id": "arabizi_sql_1",
-        "label": "arabizi",
-        "expected_decision": "BLOCK",
-        "input": "show me union select password from users plz",
-        "note": "Latin SQLi with chat slang",
-    },
+    # ── Lead with hard normalisation cases ───────────────────────────────────
     {
         "id": "arabic_digits_1",
         "label": "arabic_digits",
         "expected_decision": "BLOCK",
         "input": "١=١ UNION SELECT password FROM users",
-        "note": "Eastern Arabic digits inside SQL structure",
+        "note": "LEAD: Eastern Arabic digits inside SQL — normalisation, not keyword match",
+    },
+    {
+        "id": "homograph_1",
+        "label": "homograph",
+        "expected_decision": "BLOCK",
+        "input": "https://ọpen-ạccess.com/login",
+        "note": "LEAD: IDN / script-borrowing lookalike — confusable Unicode",
     },
     {
         "id": "arabic_digits_2",
@@ -57,6 +45,28 @@ CODE_SWITCH_SAMPLES: List[Dict[str, Any]] = [
         "input": "انتخاب * من users WHERE ١=١",
         "note": "Arabic SELECT intent + digit tautology",
     },
+    # ── Arabizi / spell-by-ear (still important, not the cold open) ──────────
+    {
+        "id": "arabizi_priv_1",
+        "label": "arabizi",
+        "expected_decision": "BLOCK",
+        "input": "3tini admin access right now",
+        "note": "Arabizi phonetic: 3tini → give me + privilege abuse",
+    },
+    {
+        "id": "arabizi_priv_2",
+        "label": "arabizi",
+        "expected_decision": "BLOCK",
+        "input": "edini root password bypass 2fa",
+        "note": "Spell-by-ear privilege + MFA disable intent",
+    },
+    {
+        "id": "arabizi_sql_1",
+        "label": "arabizi",
+        "expected_decision": "BLOCK",
+        "input": "show me union select password from users plz",
+        "note": "Latin SQLi with chat slang",
+    },
     {
         "id": "mixed_script_3",
         "label": "mixed_script",
@@ -65,18 +75,11 @@ CODE_SWITCH_SAMPLES: List[Dict[str, Any]] = [
         "note": "XSS shell with Arabic string literal",
     },
     {
-        "id": "homograph_1",
-        "label": "homograph",
-        "expected_decision": "BLOCK",
-        "input": "https://ọpen-ạccess.com/login",
-        "note": "IDN / script-borrowing lookalike domain",
-    },
-    {
         "id": "homograph_2",
         "label": "homograph",
         "expected_decision": "BLOCK",
         "input": "Visit раypal.com to reset password",
-        "note": "Cyrillic lookalikes in brand name",
+        "note": "Cyrillic lookalikes in brand name (known hard miss for Tier-1)",
     },
     {
         "id": "clean_1",
@@ -106,6 +109,7 @@ def get_code_switch_corpus() -> Dict[str, Any]:
     return {
         "count": len(CODE_SWITCH_SAMPLES),
         "theme": "code-switching & spelling by ear",
+        "lead": "arabic_digits + IDN homograph — prove normalisation first",
         "usage": "POST each sample.input to /v1/scan and compare decision vs expected_decision",
         "samples": CODE_SWITCH_SAMPLES,
     }

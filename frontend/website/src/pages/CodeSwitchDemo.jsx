@@ -6,28 +6,21 @@ import "../styles/codeswitch.css";
 
 const API = import.meta.env.VITE_API_URL || "/api";
 
-/** Local fallback so sample buttons render even if the API is cold. */
+/** Local fallback — order matches live demo: digits + IDN first (prove normalisation). */
 const FALLBACK_SAMPLES = [
-  {
-    id: "arabizi_priv_1",
-    label: "arabizi",
-    expected_decision: "BLOCK",
-    input: "3tini admin access right now",
-    note: "Arabizi phonetic: 3tini → give me + privilege abuse",
-  },
-  {
-    id: "arabizi_priv_2",
-    label: "arabizi",
-    expected_decision: "BLOCK",
-    input: "edini root password bypass 2fa",
-    note: "Spell-by-ear privilege + MFA disable intent",
-  },
   {
     id: "arabic_digits_1",
     label: "arabic_digits",
     expected_decision: "BLOCK",
     input: "١=١ UNION SELECT password FROM users",
-    note: "Eastern Arabic digits inside SQL structure",
+    note: "LEAD: Eastern Arabic digits inside SQL — normalisation, not keyword match",
+  },
+  {
+    id: "homograph_1",
+    label: "homograph",
+    expected_decision: "BLOCK",
+    input: "https://ọpen-ạccess.com/login",
+    note: "LEAD: IDN / script-borrowing lookalike — confusable Unicode",
   },
   {
     id: "mixed_script_1",
@@ -37,11 +30,11 @@ const FALLBACK_SAMPLES = [
     note: "Arabic destructive verb + English table noun",
   },
   {
-    id: "homograph_1",
-    label: "homograph",
+    id: "arabizi_priv_1",
+    label: "arabizi",
     expected_decision: "BLOCK",
-    input: "https://ọpen-ạccess.com/login",
-    note: "IDN / script-borrowing lookalike domain",
+    input: "3tini admin access right now",
+    note: "Arabizi phonetic: 3tini → give me + privilege abuse",
   },
   {
     id: "clean_1",
@@ -49,6 +42,13 @@ const FALLBACK_SAMPLES = [
     expected_decision: "ALLOW",
     input: "Please schedule the Q3 vendor meeting for Tuesday.",
     note: "Clean English business note",
+  },
+  {
+    id: "clean_2",
+    label: "clean",
+    expected_decision: "ALLOW",
+    input: "شكرا على المساعدة في تقرير المبيعات",
+    note: "Clean Arabic business thanks — should stay ALLOW",
   },
 ];
 
@@ -151,12 +151,13 @@ export default function CodeSwitchDemo() {
   return (
     <div className="cs-page">
       <header className="cs-hero">
-        <p className="cs-eyebrow">Theme 01 · Hero feature</p>
-        <h2>Code-switch &amp; spell-by-ear security demo</h2>
+        <p className="cs-eyebrow">AI / ML · Core submission</p>
+        <h2>Code-switch &amp; spell-by-ear security</h2>
         <p>
-          Language tools learn one clean official version of a language. People switch tongues mid-sentence,
-          spell by ear, and write one language in another&apos;s script. Click a sample — SyRA normalises,
-          scores, and returns ALLOW / WARN / BLOCK.
+          Lead with the hard cases: <strong>Arabic-Indic digits in SQL</strong> and an{" "}
+          <strong>IDN homograph URL</strong> — those prove normalisation, not keyword
+          matching. Then try Arabizi / mixed script. Eval with kept misses:{" "}
+          <Link to="/eval">/eval</Link>.
         </p>
         {backendOk === false && (
           <p className="cs-backend-hint">
