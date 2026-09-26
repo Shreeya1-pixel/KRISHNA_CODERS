@@ -1,5 +1,5 @@
 """
-SafeO Python SDK — thin HTTP client for the /v1 universal API.
+SyRA Python SDK — thin HTTP client for the /v1 universal API.
 """
 from __future__ import annotations
 
@@ -8,15 +8,15 @@ from typing import Any, Dict, List, Optional
 import requests
 
 
-class SafeOError(Exception):
-    """Raised when the SafeO API returns a non-2xx response."""
+class SyRAError(Exception):
+    """Raised when the SyRA API returns a non-2xx response."""
 
     def __init__(self, status_code: int, message: str):
         self.status_code = status_code
         super().__init__(f"[{status_code}] {message}")
 
 
-class SafeOClient:
+class SyRAClient:
     def __init__(self, api_key: str, base_url: str = "http://localhost:8001"):
         self.api_key = api_key
         self.base_url = base_url.rstrip("/")
@@ -34,7 +34,7 @@ class SafeOClient:
                 detail = resp.json().get("detail", resp.text)
             except Exception:
                 detail = resp.text
-            raise SafeOError(resp.status_code, str(detail))
+            raise SyRAError(resp.status_code, str(detail))
         return resp.json()
 
     def scan(self, input_text: str, context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:

@@ -18,8 +18,8 @@ node_modules/
 dist/
 
 # Generated screenshots
-backend/safeo_backend/static/screenshots/*
-!backend/safeo_backend/static/screenshots/.gitkeep
+backend/syra_backend/static/screenshots/*
+!backend/syra_backend/static/screenshots/.gitkeep
 
 # OS / IDE
 .DS_Store
@@ -27,8 +27,6 @@ backend/safeo_backend/static/screenshots/*
 .vscode/
 .cursor/
 
-# Local Odoo install (not bundled)
-/odoo/
 
 # graphify knowledge-graph output (local artifact)
 graphify-out/

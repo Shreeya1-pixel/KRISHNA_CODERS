@@ -79,7 +79,7 @@ export default function WorkflowBuilder() {
   /* ─── canvas events ─────────────────────────────────────── */
   const onCanvasDrop = (e) => {
     e.preventDefault();
-    const type = e.dataTransfer.getData("application/safeo-node");
+    const type = e.dataTransfer.getData("application/syra-node");
     if (!type || !CATALOG_BY_ID[type] || isFixedNode(type)) return;
     const pos = screenToCanvas(e.clientX, e.clientY);
     const id = `n_${type}_${Date.now()}`;
@@ -335,7 +335,7 @@ export default function WorkflowBuilder() {
                   draggable={!meta.locked}
                   onDragStart={(e) => {
                     if (meta.locked) { e.preventDefault(); return; }
-                    e.dataTransfer.setData("application/safeo-node", meta.id);
+                    e.dataTransfer.setData("application/syra-node", meta.id);
                     e.dataTransfer.effectAllowed = "copy";
                   }}
                 >

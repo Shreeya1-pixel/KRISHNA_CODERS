@@ -18,7 +18,7 @@ export const CHATGPT_DEMO_RESPONSE = {
   footnote: "Prepared demo artifact — illustrates how LLMs normalize confusable Unicode visually.",
 };
 
-export function buildSafeoDemoSummary(scan) {
+export function buildSyraDemoSummary(scan) {
   if (!scan) return null;
   const url = scan.url_analysis || {};
   return {

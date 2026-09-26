@@ -123,7 +123,7 @@ export default function DemoERP() {
         </header>
 
         <p className="derp-help">
-          This is a fake ERP for demos and judging — no Odoo install required. Submit a field; SyRA
+          This is a fake ERP for demos and judging — no external ERP install required. Submit a field; SyRA
           returns ALLOW / WARN / BLOCK <em>before</em> the record would be saved.
         </p>
 

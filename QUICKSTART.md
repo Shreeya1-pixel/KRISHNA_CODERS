@@ -1,6 +1,6 @@
-# SafeO — Demo Quickstart
+# SyRA — Demo Quickstart
 
-**Live deployment:** https://safeo-shield-1.onrender.com
+**Live deployment:** https://syra-shield-1.onrender.com
 
 Run from the **repo root**. Main folders: `backend/` · `frontend/`
 
@@ -39,47 +39,42 @@ python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 cp ../.env.example .env          # API keys, optional Fireworks/vLLM settings
 export PYTHONPATH="$(pwd)"
-uvicorn safeo_backend.main:app --host 127.0.0.1 --port 8001 --reload
+uvicorn syra_backend.main:app --host 127.0.0.1 --port 8001 --reload
 ```
 
 Or: `backend/scripts/run_all.sh`
 
 ---
 
-## Section 4 — Open Demo ERP
-
-`addons_path` must include **`frontend/odoo_module`** (see `odoo.conf.example`).
-
-```bash
-cd /path/to/your/odoo
-./venv/bin/python odoo-bin -c odoo.conf --http-port=8069
-```
-
-Install **SafeO — ERP Risk Decision Engine** (`securec_odoo`).  
-Settings → API URL = `http://127.0.0.1:8001`
-
----
-
-## Section 5 — Standalone website (optional)
+## Section 4 — Demo ERP + website
 
 ```bash
 cd frontend/website && npm install && npm run dev
 ```
 
-Open http://localhost:5174
+Open:
+
+| URL | Purpose |
+|-----|---------|
+| http://localhost:5174 | Landing |
+| http://localhost:5174/demo | Code-switch hero |
+| http://localhost:5174/erp-demo | Demo ERP (Accounting / CRM / HR) |
+| http://localhost:5174/connect | Connectors |
+
+Demo ERP talks to SyRA on port **8001** (`source_system: demo_erp`).
 
 ---
 
-## Section 6 — Local agent graph
+## Section 5 — Local agent graph
 
-SafeO now uses an in-process LangGraph-style investigation graph:
+SyRA uses an in-process LangGraph-style investigation graph:
 
 ```
 Multilingual -> Policy + Forensics in parallel -> Verifier -> Remediation
 ```
 
 No external Band setup is required. Optional Fireworks agent calls can be enabled
-with `SAFEO_ENABLE_AGENT_LLM=true` and `SAFEO_AGENT_LLM_API_KEY`.
+with `SYRA_ENABLE_AGENT_LLM=true` and `SYRA_AGENT_LLM_API_KEY`.
 
 ---
 
@@ -101,7 +96,7 @@ Expected: `"decision": "BLOCK"`, non-empty `scan_id`
 
 | Symptom | Fix |
 |---------|-----|
-| Demo ERP needs SyRA API | Open Demo ERP on 8069 |
+| Demo ERP disabled | Start SyRA API on port 8001 |
 | `401` on `/v1/*` | `Authorization: Bearer internal` |
 | Agent logs missing | Check `/ws/investigation/{scan_id}` and investigation detail endpoint |
-| Dashboard offline | API URL in Odoo Settings |
+| Dashboard offline | Confirm `VITE_API_URL` / backend health |

@@ -1,4 +1,4 @@
-const STORAGE_KEY = "safeo_workflow_pipelines";
+const STORAGE_KEY = "syra_workflow_pipelines";
 const API = import.meta.env.VITE_API_URL || "/api";
 
 export function loadPipelines() {

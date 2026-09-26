@@ -16,7 +16,7 @@
   to { opacity: 1; }
 }
 
-/* SyRA landing page — matches safeo.css brand (red #E8202A, dark ink) */
+/* SyRA landing page — matches syra.css brand (red #E8202A, dark ink) */
 .land {
   position: relative;
   --l-red: #E8202A;

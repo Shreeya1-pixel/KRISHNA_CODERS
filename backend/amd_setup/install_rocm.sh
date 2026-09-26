@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# SafeO — AMD ROCm 6.x + PyTorch (ROCm) + vLLM prerequisites
+# SyRA — AMD ROCm 6.x + PyTorch (ROCm) + vLLM prerequisites
 # Run on Ubuntu 22.04/24.04 with supported AMD GPUs. Review AMD docs for your distro.
 set -euo pipefail
 
 ROCM_VERSION="${ROCM_VERSION:-6.2}"
 PYTORCH_INDEX="${PYTORCH_INDEX:-https://download.pytorch.org/whl/rocm6.2}"
 
-echo "==> SafeO AMD setup (ROCm ${ROCM_VERSION})"
+echo "==> SyRA AMD setup (ROCm ${ROCM_VERSION})"
 
 if ! command -v python3 >/dev/null 2>&1; then
   echo "python3 is required." >&2
@@ -39,10 +39,10 @@ pip install --upgrade pip wheel setuptools
 echo "==> Installing PyTorch with ROCm wheel index..."
 pip install torch torchvision torchaudio --index-url "${PYTORCH_INDEX}"
 
-echo "==> Installing SafeO ML dependencies..."
+echo "==> Installing SyRA ML dependencies..."
 pip install transformers accelerate sentencepiece numpy scipy vllm
 
-echo "==> Installing SafeO API dependencies..."
+echo "==> Installing SyRA API dependencies..."
 pip install -r "${BACKEND_DIR}/requirements.txt"
 
 echo "==> Verifying GPU visibility..."

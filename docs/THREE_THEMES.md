@@ -1,6 +1,6 @@
-# SafeO × Three Secret Problems — Framing & Features
+# SyRA × Three Secret Problems — Framing & Features
 
-These three problems are yours alone. SafeO already owns #1. #2 and #3 need
+These three problems are yours alone. SyRA already owns #1. #2 and #3 need
 deliberate product framing (and a few high-leverage features) so judges see one
 coherent system answering all three — not three bolted-on demos.
 
@@ -14,7 +14,7 @@ coherent system answering all three — not three bolted-on demos.
 | 02 | Blockchain / Web3 | Sybil / identity | Rules assume **one human, one stake** — but agent swarms make **10,000 fake participants cheap and indistinguishable** |
 | 03 | Web | Responsive UI | Ops UIs are designed for **quiet, climate-controlled desktops** — but compliance logging happens in **glare, heat, exhaustion** |
 
-SafeO's through-line for judges:
+SyRA's through-line for judges:
 
 > **Security decisions must work when language is messy, when actors are swarming, and when the human logging the decision can barely see the screen.**
 
@@ -30,7 +30,7 @@ SafeO's through-line for judges:
 ### Framing change (README + pitch)
 Stop saying "Arabic support." Say:
 
-> SafeO is built for **language as people actually write it** — not as textbooks print it. Code-switching, phonetic spelling, and script-borrowing are not edge cases; they are the attack surface.
+> SyRA is built for **language as people actually write it** — not as textbooks print it. Code-switching, phonetic spelling, and script-borrowing are not edge cases; they are the attack surface.
 
 ### Features to add (pick 2–3 for demo)
 1. **Phonetic / Arabizi normalizer panel** — show input → normalized form → matched threat side-by-side (`3tini admin` → `give me admin` → privilege abuse).
@@ -39,7 +39,7 @@ Stop saying "Arabic support." Say:
 4. **Script-borrow detector** — flag Latin letters that look Arabic, Arabic digits in SQL, Homoglyph IDN — already partial; label it as "script borrowing."
 
 ### Demo line for judges
-> "English-first tools train on clean Arabic. Attackers write like WhatsApp. SafeO reads WhatsApp."
+> "English-first tools train on clean Arabic. Attackers write like WhatsApp. SyRA reads WhatsApp."
 
 ---
 
@@ -50,14 +50,14 @@ You are not building Ethereum. You are answering the **same trust problem**:
 
 > When creating 10,000 "participants" is free, how do you know a scan / vote / alert / agent action came from a **real stake**, not a swarm?
 
-SafeO's existing assets that map cleanly:
+SyRA's existing assets that map cleanly:
 - SHA-256 checkpoint / audit chain (tamper-evident history)
 - Bayesian thresholds from **human** analyst feedback (stake = human cost)
 - VerifierAgent as false-positive meta-judge
 - API keys / bearer auth (too weak alone — say so)
 
 ### Framing change
-> SafeO treats automated agent swarms as a Sybil threat against the security plane itself: flood-scans, feedback poisoning, and fake "analyst" approvals that look like ordinary traffic.
+> SyRA treats automated agent swarms as a Sybil threat against the security plane itself: flood-scans, feedback poisoning, and fake "analyst" approvals that look like ordinary traffic.
 
 ### Features to add (high leverage, still on-brand)
 1. **Stake-weighted feedback** — only authenticated analyst roles update Bayesian priors; anonymous / API-key-only feedback is quarantined. (Human stake = Sybil cost.)
@@ -66,10 +66,10 @@ SafeO's existing assets that map cleanly:
 4. **Optional light Web3 hook (only if time)** — publish investigation root hash to a public chain / or store Merkle root of daily audit chain. One tx/day is enough for the story: "cheap swarm cannot rewrite yesterday's evidence."
 
 ### Demo line for judges
-> "Acting as ten thousand scanners costs almost nothing. Poisoning SafeO's thresholds still costs a real analyst — and the audit chain makes forged swarm approvals detectable."
+> "Acting as ten thousand scanners costs almost nothing. Poisoning SyRA's thresholds still costs a real analyst — and the audit chain makes forged swarm approvals detectable."
 
 ### What NOT to do
-- Don't rename SafeO a "blockchain product."
+- Don't rename SyRA a "blockchain product."
 - Don't add a tokenomics slide.
 - Do say: **Sybil resistance for the decision layer**, using stake + attestation + rate reality.
 
@@ -81,7 +81,7 @@ SafeO's existing assets that map cleanly:
 Your dashboard is a dark desktop UI. The problem asks for **field ops**: glare, heat, exhaustion — emergency / workplace compliance logging.
 
 ### Framing change
-> Security and compliance logging does not happen in a quiet office. SafeO's **Glare Mode** is an operational UI for phones and tablets used outdoors, in warehouses, and at incident sites — large type, extreme contrast, one-thumb verdicts, exhaustion-safe actions.
+> Security and compliance logging does not happen in a quiet office. SyRA's **Glare Mode** is an operational UI for phones and tablets used outdoors, in warehouses, and at incident sites — large type, extreme contrast, one-thumb verdicts, exhaustion-safe actions.
 
 ### Features to add (this is the most visible "new" demo surface)
 1. **Glare / Field Mode toggle** (global CSS)
@@ -95,13 +95,13 @@ Your dashboard is a dark desktop UI. The problem asks for **field ops**: glare, 
 5. **Voice / large-target feedback** — optional: approve/reject investigation with two giant buttons only.
 
 ### Demo line for judges
-> "WAFs are designed for SOC monitors. Incidents are logged in parking lots. SafeO's field UI is built for the parking lot."
+> "WAFs are designed for SOC monitors. Incidents are logged in parking lots. SyRA's field UI is built for the parking lot."
 
 ---
 
 ## Single product narrative (use this in README + pitch)
 
-**SafeO** is a real-time ALLOW / WARN / BLOCK engine for enterprise inputs.
+**SyRA** is a real-time ALLOW / WARN / BLOCK engine for enterprise inputs.
 
 It is specifically engineered against three failure modes of modern systems:
 

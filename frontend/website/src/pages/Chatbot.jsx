@@ -5,7 +5,7 @@ import { RoleResultView } from "../chatbot/ResultViews";
 import {
   HOMOGRAPH_DEMO_URL,
   CHATGPT_DEMO_RESPONSE,
-  buildSafeoDemoSummary,
+  buildSyraDemoSummary,
 } from "../chatbot/demoArtifact";
 import "../styles/chatbot.css";
 
@@ -88,7 +88,7 @@ export default function Chatbot() {
     }
   };
 
-  const safeoDemo = buildSafeoDemoSummary(demoScan);
+  const syraDemo = buildSyraDemoSummary(demoScan);
 
   return (
     <div className="cb-page">
@@ -130,28 +130,28 @@ export default function Chatbot() {
               {CHATGPT_DEMO_RESPONSE.body.map((line, i) => <li key={i}>{line}</li>)}
             </ul>
           </div>
-          <div className="cb-compare-panel safeo">
-            <div className="cb-compare-title">{safeoDemo?.title || "SyRA"}</div>
-            <div className="cb-compare-sub">{safeoDemo?.subtitle || "Live scan result"}</div>
-            {safeoDemo ? (
+          <div className="cb-compare-panel syra">
+            <div className="cb-compare-title">{syraDemo?.title || "SyRA"}</div>
+            <div className="cb-compare-sub">{syraDemo?.subtitle || "Live scan result"}</div>
+            {syraDemo ? (
               <>
-                <div className={`cb-compare-verdict ${safeoDemo.verdictClass}`}>{safeoDemo.verdict}</div>
-                <p><strong>Host:</strong> <code>{safeoDemo.host || HOMOGRAPH_DEMO_URL}</code></p>
-                {safeoDemo.flagged_chars.length > 0 && (
+                <div className={`cb-compare-verdict ${syraDemo.verdictClass}`}>{syraDemo.verdict}</div>
+                <p><strong>Host:</strong> <code>{syraDemo.host || HOMOGRAPH_DEMO_URL}</code></p>
+                {syraDemo.flagged_chars.length > 0 && (
                   <table className="cb-table compact">
                     <thead><tr><th>Char</th><th>Codepoint</th><th>Looks like</th></tr></thead>
                     <tbody>
-                      {safeoDemo.flagged_chars.map((f, i) => (
+                      {syraDemo.flagged_chars.map((f, i) => (
                         <tr key={i}><td><code>{f.char}</code></td><td>{f.codepoint}</td><td>{f.looks_like}</td></tr>
                       ))}
                     </tbody>
                   </table>
                 )}
                 <div className="cb-tags">
-                  {(safeoDemo.mitre || []).map((t) => <span key={t} className="cb-tag mitre">{t}</span>)}
+                  {(syraDemo.mitre || []).map((t) => <span key={t} className="cb-tag mitre">{t}</span>)}
                 </div>
-                <p className="cb-muted">Risk {Math.round((safeoDemo.risk_score || 0) * 100)}% · Uncertainty {safeoDemo.uncertainty_score}</p>
-                <code className="cb-hash">{safeoDemo.audit_hash}</code>
+                <p className="cb-muted">Risk {Math.round((syraDemo.risk_score || 0) * 100)}% · Uncertainty {syraDemo.uncertainty_score}</p>
+                <code className="cb-hash">{syraDemo.audit_hash}</code>
               </>
             ) : (
               <p className="cb-muted">Run the demo to populate SyRA side…</p>

@@ -78,7 +78,7 @@ SAP, Oracle, or your own stack with one API key.
 ### No OpenAI keys required
 
 Default path runs **fully offline** for Tier 1 (+ local Tier 2 TF-IDF fallback).  
-Set `SAFEO_API_KEYS=internal` and scan. Optional LLM is an upgrade, not a dependency.
+Set `SYRA_API_KEYS=internal` and scan. Optional LLM is an upgrade, not a dependency.
 
 ---
 
@@ -136,11 +136,11 @@ source .venv/bin/activate
 pip install -r requirements.txt
 
 cp ../.env.example .env
-# SAFEO_API_KEYS=internal
-# SAFEO_FEEDBACK_DB=data/safeo_feedback.db
+# SYRA_API_KEYS=internal
+# SYRA_FEEDBACK_DB=data/syra_feedback.db
 
 export PYTHONPATH="$(pwd)"
-uvicorn safeo_backend.main:app --host 127.0.0.1 --port 8001 --reload
+uvicorn syra_backend.main:app --host 127.0.0.1 --port 8001 --reload
 ```
 
 Smoke test:
@@ -177,7 +177,7 @@ or **Connect → Open Demo ERP**. Accounting / CRM / HR forms call SyRA before s
 
 ```text
 backend/
-  safeo_backend/      # API package path (unchanged); product name is SyRA
+  syra_backend/      # FastAPI decision engine package
     agents/
     core/
       ml/
@@ -232,7 +232,7 @@ Header **Glare** toggle → extreme contrast, large targets, hold-to-confirm on 
 | POST | `/v1/feedback` | Stake-gated human feedback |
 | GET | `/v1/health` | Health |
 
-Auth: `Authorization: Bearer internal` (or any key in `SAFEO_API_KEYS`).
+Auth: `Authorization: Bearer internal` (or any key in `SYRA_API_KEYS`).
 
 ---
 

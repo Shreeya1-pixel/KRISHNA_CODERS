@@ -10,8 +10,8 @@ backend/
 ├── .env.example              # → copy to backend/.env
 ├── scripts/run_all.sh        # Start uvicorn
 ├── amd_setup/                # Optional ROCm + vLLM (Tier 3)
-├── sdk/python/               # SafeOClient for /v1/scan
-└── safeo_backend/
+├── sdk/python/               # SyRAClient for /v1/scan
+└── syra_backend/
     ├── main.py               # ASGI entry
     ├── routes/               # erp, universal (/v1), investigations, simulate
     ├── agents/               # LangGraph orchestration + specialist agents
@@ -28,7 +28,7 @@ python3.11 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 cp ../.env.example .env
 export PYTHONPATH="$(pwd)"
-uvicorn safeo_backend.main:app --host 127.0.0.1 --port 8001 --reload
+uvicorn syra_backend.main:app --host 127.0.0.1 --port 8001 --reload
 ```
 
 Or from repo root: `backend/scripts/run_all.sh`

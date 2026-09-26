@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-# SafeO — start the FastAPI decision engine (required for Odoo + demos).
-# Odoo itself is not bundled here; run your Odoo 19 instance separately (see README).
+# SyRA — start the FastAPI decision engine (required for Demo ERP + demos).
 
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -19,6 +18,6 @@ if [[ -f "${ROOT}/../.env" ]]; then
   source "${ROOT}/../.env"
   set +a
 fi
-echo "Starting SafeO API on http://127.0.0.1:8001 (Swagger: /docs)"
-echo "In another terminal: start Odoo with addons-path including frontend/odoo_module"
-exec .venv/bin/python -m uvicorn safeo_backend.main:app --host 127.0.0.1 --port 8001 --reload
+echo "Starting SyRA API on http://127.0.0.1:8001 (Swagger: /docs)"
+echo "In another terminal: cd frontend/website && npm run dev  →  http://127.0.0.1:5174/erp-demo"
+exec .venv/bin/python -m uvicorn syra_backend.main:app --host 127.0.0.1 --port 8001 --reload

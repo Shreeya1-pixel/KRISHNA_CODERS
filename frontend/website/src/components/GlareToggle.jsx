@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const STORAGE_KEY = "safeo_glare_mode";
+const STORAGE_KEY = "syra_glare_mode";
 
 export function getGlareMode() {
   try {

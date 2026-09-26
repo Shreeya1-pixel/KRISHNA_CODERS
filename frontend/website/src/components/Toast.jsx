@@ -13,7 +13,7 @@ export function ToastProvider({ children }) {
   return (
     <ToastContext.Provider value={{ showToast }}>
       {children}
-      {toast && <div className="safeo-toast">{toast}</div>}
+      {toast && <div className="syra-toast">{toast}</div>}
     </ToastContext.Provider>
   );
 }

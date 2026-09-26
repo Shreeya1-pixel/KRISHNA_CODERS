@@ -6,7 +6,7 @@
 .wf-root {
   position: fixed;
   inset: 0;
-  top: 65px;          /* height of safeo-header */
+  top: 65px;          /* height of syra-header */
   display: flex;
   flex-direction: column;
   background: #f8fafc;
@@ -479,7 +479,7 @@
 }
 
 /* ── override Layout so canvas fills screen ─────────────── */
-.safeo-main.wf-main-full {
+.syra-main.wf-main-full {
   padding: 0 !important;
   max-width: none !important;
   overflow: hidden;

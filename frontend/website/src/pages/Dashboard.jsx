@@ -5,9 +5,9 @@ import { countReachableConnections, loadConnections, markErpConnected } from "..
 
 function StatCard({ label, value, accent }) {
   return (
-    <div className={`safeo-stat-card${accent ? ` accent-${accent}` : ""}`}>
-      <div className="safeo-stat-value">{value}</div>
-      <div className="safeo-stat-label">{label}</div>
+    <div className={`syra-stat-card${accent ? ` accent-${accent}` : ""}`}>
+      <div className="syra-stat-value">{value}</div>
+      <div className="syra-stat-label">{label}</div>
     </div>
   );
 }
@@ -45,8 +45,8 @@ export default function Dashboard() {
   const summary = stats?.summary || {};
 
   return (
-    <div className="safeo-page">
-      <div className="safeo-page-header">
+    <div className="syra-page">
+      <div className="syra-page-header">
         <h2>Business Risk Dashboard</h2>
         <p>
           Real-time business risk decisions. Use{" "}
@@ -54,7 +54,7 @@ export default function Dashboard() {
         </p>
       </div>
 
-      <div className="safeo-stat-grid">
+      <div className="syra-stat-grid">
         <StatCard label="Total Scans" value={summary.total_scans ?? "—"} />
         <StatCard label="Blocked" value={summary.blocked ?? "—"} accent="danger" />
         <StatCard label="LLM Calls Saved" value={`${summary.llm_calls_saved_pct ?? 0}%`} />
@@ -62,23 +62,23 @@ export default function Dashboard() {
         <StatCard label="Open Investigations" value={summary.active_investigations ?? 0} />
       </div>
 
-      <Link to="/connect" className="safeo-erp-banner">
+      <Link to="/connect" className="syra-erp-banner">
         <span>
           SyRA is connected to <strong>{connectedCount}</strong> ERP system
           {connectedCount === 1 ? "" : "s"}
         </span>
-        <span className="safeo-erp-banner-cta">Manage Connections →</span>
+        <span className="syra-erp-banner-cta">Manage Connections →</span>
       </Link>
 
-      <div className="safeo-card">
+      <div className="syra-card">
         <h3>Recent Decisions</h3>
         {!stats?.recent_decisions?.length ? (
-          <p className="safeo-muted">
+          <p className="syra-muted">
             No decisions yet. Run a scan from /demo or open{" "}
             <Link to="/erp-demo">Demo ERP</Link>.
           </p>
         ) : (
-          <table className="safeo-table">
+          <table className="syra-table">
             <thead>
               <tr>
                 <th>Time</th>
@@ -105,8 +105,8 @@ export default function Dashboard() {
         )}
       </div>
 
-      <div className="safeo-dashboard-footer">
-        <div className="safeo-status-strip">
+      <div className="syra-dashboard-footer">
+        <div className="syra-status-strip">
           <span>SyRA API: {syraUp ? "Connected" : "Offline"}</span>
           <span>Demo ERP: {syraUp ? "Ready" : "Needs SyRA"}</span>
         </div>

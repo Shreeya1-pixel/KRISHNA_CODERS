@@ -1,6 +1,6 @@
-## Three Failure Modes SafeO Is Built Against
+## Three Failure Modes SyRA Is Built Against
 
-SafeO is not a generic scanner with a multilingual checkbox. It is engineered
+SyRA is not a generic scanner with a multilingual checkbox. It is engineered
 against three failure modes that show up the moment real people, real agents,
 and real field conditions enter the system.
 
@@ -10,7 +10,7 @@ Language tools learn one clean official version of a language. People do not
 write that way. They switch tongues mid-sentence, spell by ear, and write one
 language in another's script.
 
-SafeO's `MultilingualAgent` treats that mess as the **primary attack surface**,
+SyRA's `MultilingualAgent` treats that mess as the **primary attack surface**,
 not an edge case:
 
 ```text
@@ -21,16 +21,16 @@ not an edge case:
 ```
 
 Normalization runs **before** pattern matching. English-first WAFs miss these;
-SafeO is built so they cannot.
+SyRA is built so they cannot.
 
 ### 02 — Sybil resistance under agent swarms (trust / Web3-shaped)
 
 Networks assume each participant is a separate someone with something to lose —
 exactly when acting as ten thousand costs almost nothing and looks ordinary.
 
-SafeO applies that threat model to the **security decision plane**:
+SyRA applies that threat model to the **security decision plane**:
 
-| Swarm abuse | SafeO counter |
+| Swarm abuse | SyRA counter |
 |---|---|
 | Flood of automated scans / fake identities | Burst + fingerprint clustering → `SYBIL_SUSPECT`, raised thresholds |
 | Fake "analyst" feedback poisoning thresholds | Stake-gated feedback — only authenticated human analyst roles move Bayesian priors |
@@ -44,7 +44,7 @@ or rewrite a **tamper-evident investigation chain**.
 Operational UIs are designed for climate-controlled desktops. Emergency and
 workplace compliance logging happens under solar glare, heat, and exhaustion.
 
-SafeO ships a **Field / Glare Mode** for phones and tablets at the incident site:
+SyRA ships a **Field / Glare Mode** for phones and tablets at the incident site:
 
 - Extreme contrast (sun-readable); no thin gray-on-gray
 - Oversized ALLOW / WARN / BLOCK targets for gloved or fatigued hands

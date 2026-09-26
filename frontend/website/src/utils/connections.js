@@ -48,7 +48,7 @@ export function countReachableConnections(syraReachable, connections) {
   let n = 0;
   if (syraReachable) n += 1; // Demo ERP is online whenever SyRA is
   for (const [key, val] of Object.entries(connections || {})) {
-    if (key === "demo_erp" || key === "odoo") continue;
+    if (key === "demo_erp") continue;
     if (val?.status === "connected") n += 1;
   }
   return n;

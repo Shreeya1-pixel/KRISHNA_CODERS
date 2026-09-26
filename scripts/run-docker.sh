@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Run the full SafeO stack via Docker (stops conflicting local dev servers on 5174/8001).
+# Run the full SyRA stack via Docker (stops conflicting local dev servers on 5174/8001).
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
@@ -20,7 +20,7 @@ echo "Building and starting Docker Compose..."
 docker compose up --build -d
 
 echo ""
-echo "SafeO is running:"
+echo "SyRA is running:"
 echo "  Frontend:  http://localhost:5174/"
 echo "  Logs:      http://localhost:5174/logs"
 echo "  Backend:   http://localhost:8001/"

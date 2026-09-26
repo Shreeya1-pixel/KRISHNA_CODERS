@@ -13,7 +13,7 @@
   font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--safeo-muted, #6b7280);
+  color: var(--syra-muted, #6b7280);
   margin: 0 0 8px;
 }
 
@@ -25,14 +25,14 @@
 
 .cs-sub {
   margin: 0 0 8px;
-  color: var(--safeo-muted, #6b7280);
+  color: var(--syra-muted, #6b7280);
   font-size: 15px;
   max-width: 640px;
 }
 
 .cs-meta {
   font-size: 12px;
-  color: var(--safeo-muted, #6b7280);
+  color: var(--syra-muted, #6b7280);
 }
 
 .cs-samples h3,
@@ -50,7 +50,7 @@
 
 .cs-sample-btn {
   text-align: left;
-  border: 2px solid var(--safeo-border, #e5e7eb);
+  border: 2px solid var(--syra-border, #e5e7eb);
   background: #fff;
   border-radius: 10px;
   padding: 12px 14px;
@@ -96,11 +96,11 @@
 
 .cs-expect {
   font-size: 11px;
-  color: var(--safeo-muted, #6b7280);
+  color: var(--syra-muted, #6b7280);
 }
 
 .cs-result-panel {
-  border: 1px solid var(--safeo-border, #e5e7eb);
+  border: 1px solid var(--syra-border, #e5e7eb);
   border-radius: 12px;
   padding: 20px;
   background: #fafafa;
@@ -118,7 +118,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--safeo-muted, #6b7280);
+  color: var(--syra-muted, #6b7280);
   margin-bottom: 6px;
 }
 
@@ -126,7 +126,7 @@
   display: block;
   padding: 10px 12px;
   background: #fff;
-  border: 1px solid var(--safeo-border, #e5e7eb);
+  border: 1px solid var(--syra-border, #e5e7eb);
   border-radius: 8px;
   font-size: 13px;
   word-break: break-word;
@@ -154,7 +154,7 @@
 .cs-score {
   margin-top: 8px;
   font-size: 13px;
-  color: var(--safeo-muted, #6b7280);
+  color: var(--syra-muted, #6b7280);
 }
 
 .cs-patterns {
@@ -211,7 +211,7 @@
 
 .cs-loading,
 .cs-empty {
-  color: var(--safeo-muted, #6b7280);
+  color: var(--syra-muted, #6b7280);
 }
 
 .cs-error {
@@ -240,18 +240,18 @@
 }
 
 html[data-glare="on"] {
-  --safeo-red: #000000;
-  --safeo-border: #000000;
-  --safeo-text: #000000;
-  --safeo-muted: #111111;
-  --safeo-green-bg: #ffff00;
-  --safeo-green-text: #000000;
+  --syra-red: #000000;
+  --syra-border: #000000;
+  --syra-text: #000000;
+  --syra-muted: #111111;
+  --syra-green-bg: #ffff00;
+  --syra-green-text: #000000;
 }
 
 html[data-glare="on"] body,
-html[data-glare="on"] .safeo-app,
-html[data-glare="on"] .safeo-header,
-html[data-glare="on"] .safeo-main,
+html[data-glare="on"] .syra-app,
+html[data-glare="on"] .syra-header,
+html[data-glare="on"] .syra-main,
 html[data-glare="on"] .cs-result-panel,
 html[data-glare="on"] .cs-sample-btn,
 html[data-glare="on"] .cs-step code {
@@ -263,9 +263,9 @@ html[data-glare="on"] body {
   font-size: 18px;
 }
 
-html[data-glare="on"] .safeo-nav-link,
+html[data-glare="on"] .syra-nav-link,
 html[data-glare="on"] .cs-hero h2,
-html[data-glare="on"] .safeo-page-header h2 {
+html[data-glare="on"] .syra-page-header h2 {
   font-size: 1.25em;
   font-weight: 800;
   color: #000 !important;
@@ -297,7 +297,7 @@ html[data-glare="on"] .cs-sample-btn,
 html[data-glare="on"] .cs-action,
 html[data-glare="on"] .glare-toggle,
 html[data-glare="on"] .sim-run-btn,
-html[data-glare="on"] .safeo-nav-link {
+html[data-glare="on"] .syra-nav-link {
   min-height: 56px;
   border-width: 3px;
   font-size: 16px;
@@ -311,8 +311,8 @@ html[data-glare="on"] .cs-label,
 html[data-glare="on"] .cs-expect,
 html[data-glare="on"] .cs-sub,
 html[data-glare="on"] .cs-meta,
-html[data-glare="on"] .safeo-muted,
-html[data-glare="on"] .safeo-engine-label {
+html[data-glare="on"] .syra-muted,
+html[data-glare="on"] .syra-engine-label {
   color: #000 !important;
 }
 

@@ -20,22 +20,22 @@ export default function Layout({ children }) {
   }, []);
 
   const navLink = (to, label) => (
-    <Link to={to} className={location.pathname === to ? "safeo-nav-link active" : "safeo-nav-link"}>
+    <Link to={to} className={location.pathname === to ? "syra-nav-link active" : "syra-nav-link"}>
       {label}
     </Link>
   );
 
   return (
-    <div className="safeo-app">
-      <header className="safeo-header">
-        <Link to="/" className="safeo-brand" style={{ textDecoration: "none", color: "inherit" }}>
-          <div className="safeo-brand-mark">Sy</div>
-          <div className="safeo-brand-text">
+    <div className="syra-app">
+      <header className="syra-header">
+        <Link to="/" className="syra-brand" style={{ textDecoration: "none", color: "inherit" }}>
+          <div className="syra-brand-mark">Sy</div>
+          <div className="syra-brand-text">
             <h1>SyRA</h1>
             <span>Security decision layer</span>
           </div>
         </Link>
-        <nav className="safeo-nav">
+        <nav className="syra-nav">
           {navLink("/demo", "Code-Switch")}
           {navLink("/erp-demo", "Demo ERP")}
           {navLink("/app", "Dashboard")}
@@ -45,16 +45,16 @@ export default function Layout({ children }) {
           {navLink("/chat", "Assistant")}
           {navLink("/visual", "Visual")}
         </nav>
-        <div className="safeo-header-right">
+        <div className="syra-header-right">
           <GlareToggle />
-          <span className={`safeo-engine-dot ${backendOk ? "ok" : "off"}`} title={backendOk ? "Engine online" : "Engine offline"} />
-          <span className="safeo-engine-label">{backendOk ? "Engine online" : "Engine offline"}</span>
-          <Link to="/connect" className="sim-run-btn safeo-nav-cta">
+          <span className={`syra-engine-dot ${backendOk ? "ok" : "off"}`} title={backendOk ? "Engine online" : "Engine offline"} />
+          <span className="syra-engine-label">{backendOk ? "Engine online" : "Engine offline"}</span>
+          <Link to="/connect" className="sim-run-btn syra-nav-cta">
             Connect to Your ERP →
           </Link>
         </div>
       </header>
-      <main className={`safeo-main${location.pathname === "/workflow" ? " wf-main-full" : ""}`}>{children}</main>
+      <main className={`syra-main${location.pathname === "/workflow" ? " wf-main-full" : ""}`}>{children}</main>
       <GemmaBadge />
     </div>
   );

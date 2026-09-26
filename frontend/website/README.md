@@ -1,27 +1,21 @@
-# SyRA Standalone Website
+# SyRA website
 
-Standalone demo dashboard at **http://localhost:5174** — connects to the same FastAPI backend (port 8001) and Odoo SyRA (port 8069).
-
-## Quick start
+Standalone demo dashboard at **http://localhost:5174** — connects to the FastAPI backend on port **8001**.
 
 ```bash
-cd safeo_website
+cd frontend/website
 npm install
 npm run dev
 ```
 
-Open http://localhost:5174
+## What you get
 
-## Demo flow
+1. Landing + three themes (code-switch, Swarm Guard, Glare Mode)
+2. **Demo ERP** at `/erp-demo` — fake Accounting / CRM / HR forms gated by SyRA
+3. Connect / Dashboard / Logs against the same API
 
-1. Open the standalone dashboard
-2. Click **Connect to Your ERP →** (nav or banner)
-3. Odoo card shows **● Connected** when Odoo is running
-4. Click **Open SyRA in Odoo →** — opens http://127.0.0.1:8069/odoo/safeo in a new tab
+## Requirements
 
-## Prerequisites
+- SyRA backend on `127.0.0.1:8001` (`uvicorn syra_backend.main:app`)
 
-- FastAPI backend on `127.0.0.1:8001`
-- Odoo with `securec_odoo` on `127.0.0.1:8069` (optional, for ERP connect demo)
-
-Vite proxies `/api/*` → backend and `/odoo-health` → Odoo `/web/health` to avoid CORS in dev.
+Vite proxies `/api/*` → backend to avoid CORS in dev.

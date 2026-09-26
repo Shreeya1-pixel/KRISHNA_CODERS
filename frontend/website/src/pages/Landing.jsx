@@ -393,7 +393,7 @@ export default function Landing() {
 
       <footer className="land-footer">
         <span>SyRA — ERP Protection Layer</span>
-        <a href="https://safeo-shield-1.onrender.com" target="_blank" rel="noopener noreferrer">
+        <a href="https://syra-shield-1.onrender.com" target="_blank" rel="noopener noreferrer">
           Live deployment
         </a>
         <span>Any ERP · Demo ERP testing host</span>

@@ -13,7 +13,7 @@ import CodeSwitchDemo from "./pages/CodeSwitchDemo";
 import DemoERP from "./pages/DemoERP";
 import { fetchBackendHealth } from "./api";
 import { applyGlareMode, getGlareMode } from "./components/GlareToggle";
-import "./styles/safeo.css";
+import "./styles/syra.css";
 import "./styles/landing.css";
 import "./styles/demo.css";
 

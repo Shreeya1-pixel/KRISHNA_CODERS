@@ -79,7 +79,7 @@ async function scanSample(input, userId = "judge_demo") {
     throw new Error(
       typeof err.detail === "string"
         ? err.detail
-        : "Scan failed — start backend: cd backend && uvicorn safeo_backend.main:app --port 8001"
+        : "Scan failed — start backend: cd backend && uvicorn syra_backend.main:app --port 8001"
     );
   }
   return res.json();
@@ -156,7 +156,7 @@ export default function CodeSwitchDemo() {
           <p className="cs-backend-hint">
             Backend offline. In another terminal:{" "}
             <code>
-              cd backend && source .venv/bin/activate && PYTHONPATH=. uvicorn safeo_backend.main:app --port
+              cd backend && source .venv/bin/activate && PYTHONPATH=. uvicorn syra_backend.main:app --port
               8001
             </code>
           </p>

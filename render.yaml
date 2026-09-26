@@ -1,29 +1,29 @@
 services:
   - type: web
-    name: safeo-backend
+    name: syra-backend
     runtime: python
     plan: free
     rootDir: backend
     buildCommand: pip install -r requirements-render.txt
-    startCommand: uvicorn safeo_backend.main:app --host 0.0.0.0 --port $PORT
+    startCommand: uvicorn syra_backend.main:app --host 0.0.0.0 --port $PORT
     envVars:
-      - key: SAFEO_API_KEYS
+      - key: SYRA_API_KEYS
         sync: false
       - key: SECUREC_ENABLE_LLM_AUGMENTATION
         value: "false"
-      - key: SAFEO_ENABLE_AGENT_LLM
+      - key: SYRA_ENABLE_AGENT_LLM
         sync: false
-      - key: SAFEO_AGENT_LLM_SERVER_URL
+      - key: SYRA_AGENT_LLM_SERVER_URL
         value: https://api.fireworks.ai/inference/v1
-      - key: SAFEO_AGENT_LLM_API_KEY
+      - key: SYRA_AGENT_LLM_API_KEY
         sync: false
-      - key: SAFEO_POLICY_AGENT_MODEL
+      - key: SYRA_POLICY_AGENT_MODEL
         sync: false
-      - key: SAFEO_FORENSICS_AGENT_MODEL
+      - key: SYRA_FORENSICS_AGENT_MODEL
         sync: false
-      - key: SAFEO_REMEDIATION_AGENT_MODEL
+      - key: SYRA_REMEDIATION_AGENT_MODEL
         sync: false
-      - key: SAFEO_VERIFIER_AGENT_MODEL
+      - key: SYRA_VERIFIER_AGENT_MODEL
         sync: false
       - key: FIREWORKS_API_KEY
         sync: false
@@ -31,11 +31,11 @@ services:
         value: https://api.fireworks.ai/inference/v1
       - key: FIREWORKS_DRY_RUN
         value: "false"
-      - key: SAFEO_FEEDBACK_DB
-        value: /tmp/safeo_feedback.db
-      - key: SAFEO_ENABLE_GPU_METRICS
+      - key: SYRA_FEEDBACK_DB
+        value: /tmp/syra_feedback.db
+      - key: SYRA_ENABLE_GPU_METRICS
         value: "false"
-      - key: SAFEO_VISUAL_DEMO_BASE
+      - key: SYRA_VISUAL_DEMO_BASE
         sync: false
       - key: JIRA_BASE_URL
         sync: false
@@ -47,7 +47,7 @@ services:
         sync: false
 
   - type: web
-    name: safeo-frontend
+    name: syra-frontend
     runtime: static
     rootDir: frontend/website
     buildCommand: npm install && npm run build

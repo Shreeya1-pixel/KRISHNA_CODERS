@@ -16,8 +16,8 @@ export default function Logs() {
         if (source) {
           list = list.filter((r) => {
             const s = (r.source_system || "").toLowerCase();
-            if (source === "odoo" || source === "demo_erp") {
-              return s === "demo_erp" || s.includes("demo") || s === "odoo";
+            if (source === "demo_erp") {
+              return s === "demo_erp" || s.includes("demo");
             }
             return s === source || s.includes(source);
           });
@@ -77,8 +77,8 @@ export default function Logs() {
   }
 
   return (
-    <div className="safeo-page">
-      <div className="safeo-page-header">
+    <div className="syra-page">
+      <div className="syra-page-header">
         <h2>Risk Engine Logs</h2>
         <p>
           {source
@@ -86,13 +86,13 @@ export default function Logs() {
             : "All recent decisions from the SyRA engine"}
         </p>
       </div>
-      <div className="safeo-card">
+      <div className="syra-card">
         {loading ? (
-          <p className="safeo-muted">Loading…</p>
+          <p className="syra-muted">Loading…</p>
         ) : !rows.length ? (
-          <p className="safeo-muted">No log entries for this filter.</p>
+          <p className="syra-muted">No log entries for this filter.</p>
         ) : (
-          <table className="safeo-table">
+          <table className="syra-table">
             <thead>
               <tr>
                 <th>Time</th>
@@ -118,11 +118,11 @@ export default function Logs() {
                     <td>
                       <span className={`decision-badge ${decisionClass(row.decision)}`}>{row.decision}</span>
                     </td>
-                    <td className="safeo-jira-cell">
+                    <td className="syra-jira-cell">
                       {jira.ticket_key ? (
                         <a
                           href={jira.ticket_url}
-                          className="safeo-jira-link"
+                          className="syra-jira-link"
                           target="_blank"
                           rel="noopener noreferrer"
                         >
@@ -132,14 +132,14 @@ export default function Logs() {
                         <>
                           <button
                             type="button"
-                            className="safeo-jira-btn"
+                            className="syra-jira-btn"
                             disabled={!requestId || jira.loading}
                             onClick={() => handleCreateTicket(requestId)}
                           >
                             {jira.loading ? "Creating…" : "Create Ticket"}
                           </button>
                           {jira.error ? (
-                            <span className="safeo-jira-err" title={jira.error}>
+                            <span className="syra-jira-err" title={jira.error}>
                               {jira.error.length > 48 ? `${jira.error.slice(0, 48)}…` : jira.error}
                             </span>
                           ) : null}

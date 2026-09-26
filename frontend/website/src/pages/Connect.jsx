@@ -13,16 +13,16 @@ const BACKEND_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8001";
 
 function ErpCard({ icon, name, status, statusClass, children, primary, secondary }) {
   return (
-    <div className="safeo-erp-card">
-      <div className="safeo-erp-card-top">
-        <div className="safeo-erp-icon">{icon}</div>
+    <div className="syra-erp-card">
+      <div className="syra-erp-card-top">
+        <div className="syra-erp-icon">{icon}</div>
         <div>
           <h3>{name}</h3>
-          <span className={`safeo-status-badge ${statusClass}`}>{status}</span>
+          <span className={`syra-status-badge ${statusClass}`}>{status}</span>
         </div>
       </div>
-      <div className="safeo-erp-card-body">{children}</div>
-      <div className="safeo-erp-card-actions">
+      <div className="syra-erp-card-body">{children}</div>
+      <div className="syra-erp-card-actions">
         {primary}
         {secondary}
       </div>
@@ -98,8 +98,8 @@ export default function Connect() {
   };
 
   return (
-    <div className="safeo-page">
-      <div className="safeo-page-header">
+    <div className="syra-page">
+      <div className="syra-page-header">
         <h2>Connect to Your ERP System</h2>
         <p>
           SyRA works as a security layer in front of any ERP. Use <strong>Demo ERP</strong> for
@@ -107,7 +107,7 @@ export default function Connect() {
         </p>
       </div>
 
-      <div className="safeo-erp-grid">
+      <div className="syra-erp-grid">
         <ErpCard
           icon="DE"
           name="Demo ERP"
@@ -119,7 +119,7 @@ export default function Connect() {
             </button>
           }
           secondary={
-            <Link to="/logs?source=demo_erp" className="safeo-btn-muted">
+            <Link to="/logs?source=demo_erp" className="syra-btn-muted">
               View Demo ERP logs
             </Link>
           }
@@ -128,10 +128,10 @@ export default function Connect() {
             <>
               <p>Last scan: {formatTime(demoMetrics.lastScan)}</p>
               <p>Blocked today: {demoMetrics.blockedToday}</p>
-              <p className="safeo-muted">In-app testing ERP · Accounting / CRM / HR forms</p>
+              <p className="syra-muted">In-app testing ERP · Accounting / CRM / HR forms</p>
             </>
           ) : (
-            <p className="safeo-muted">Start SyRA API on port 8001 to enable Demo ERP</p>
+            <p className="syra-muted">Start SyRA API on port 8001 to enable Demo ERP</p>
           )}
         </ErpCard>
 
@@ -146,7 +146,7 @@ export default function Connect() {
             </button>
           }
         >
-          <p className="safeo-muted">Enterprise SAP integration via SyRA REST API</p>
+          <p className="syra-muted">Enterprise SAP integration via SyRA REST API</p>
         </ErpCard>
 
         <ErpCard
@@ -160,7 +160,7 @@ export default function Connect() {
             </button>
           }
         >
-          <p className="safeo-muted">Salesforce Apex trigger integration</p>
+          <p className="syra-muted">Salesforce Apex trigger integration</p>
         </ErpCard>
 
         <ErpCard
@@ -174,7 +174,7 @@ export default function Connect() {
             </button>
           }
         >
-          <p className="safeo-muted">Any system using the SyRA Python SDK</p>
+          <p className="syra-muted">Any system using the SyRA Python SDK</p>
         </ErpCard>
 
         <ErpCard
@@ -188,40 +188,40 @@ export default function Connect() {
             </button>
           }
         >
-          <p className="safeo-muted">Forward payloads to SyRA from any HTTP client</p>
+          <p className="syra-muted">Forward payloads to SyRA from any HTTP client</p>
         </ErpCard>
       </div>
 
       <Drawer open={drawer === "sap"} title="Connect SAP to SyRA" onClose={closeDrawer}>
         <p><strong>Step 1:</strong> Copy your API key</p>
-        <div className="safeo-key-row">
+        <div className="syra-key-row">
           <code>{apiKey}</code>
-          <button type="button" className="safeo-refresh-btn" onClick={copyKey}>Copy</button>
+          <button type="button" className="syra-refresh-btn" onClick={copyKey}>Copy</button>
         </div>
         <p><strong>Step 2:</strong> Add this to your SAP system</p>
-        <pre className="safeo-code">{`curl -X POST ${BACKEND_URL}/v1/scan \\
+        <pre className="syra-code">{`curl -X POST ${BACKEND_URL}/v1/scan \\
   -H "Authorization: Bearer ${apiKey}" \\
   -H "Content-Type: application/json" \\
   -d '{"input":"{{payload}}","context":{"source_system":"sap","user_id":"{{user}}"}}'`}</pre>
         <p><strong>Step 3:</strong> Test connection</p>
         <input
-          className="safeo-input"
+          className="syra-input"
           placeholder="https://your-sap-gateway/health"
           value={testUrl}
           onChange={(e) => setTestUrl(e.target.value)}
         />
         <button type="button" className="sim-run-btn" onClick={() => runTest("sap")}>Test</button>
-        {testResult && <p className={testResult.ok ? "safeo-ok" : "safeo-err"}>{testResult.msg}</p>}
+        {testResult && <p className={testResult.ok ? "syra-ok" : "syra-err"}>{testResult.msg}</p>}
       </Drawer>
 
       <Drawer open={drawer === "salesforce"} title="Connect Salesforce to SyRA" onClose={closeDrawer}>
         <p><strong>Step 1:</strong> Copy your API key</p>
-        <div className="safeo-key-row">
+        <div className="syra-key-row">
           <code>{apiKey}</code>
-          <button type="button" className="safeo-refresh-btn" onClick={copyKey}>Copy</button>
+          <button type="button" className="syra-refresh-btn" onClick={copyKey}>Copy</button>
         </div>
         <p><strong>Step 2:</strong> Apex trigger snippet</p>
-        <pre className="safeo-code">{`HttpRequest req = new HttpRequest();
+        <pre className="syra-code">{`HttpRequest req = new HttpRequest();
 req.setEndpoint('${BACKEND_URL}/v1/scan');
 req.setMethod('POST');
 req.setHeader('Authorization', 'Bearer ${apiKey}');
@@ -229,44 +229,44 @@ req.setHeader('Content-Type', 'application/json');
 req.setBody('{"input":"' + input + '","context":{"source_system":"salesforce"}}');
 HttpResponse res = new Http().send(req);`}</pre>
         <p><strong>Step 3:</strong> Test connection</p>
-        <input className="safeo-input" placeholder="Salesforce endpoint URL" value={testUrl} onChange={(e) => setTestUrl(e.target.value)} />
+        <input className="syra-input" placeholder="Salesforce endpoint URL" value={testUrl} onChange={(e) => setTestUrl(e.target.value)} />
         <button type="button" className="sim-run-btn" onClick={() => runTest("salesforce")}>Test</button>
-        {testResult && <p className={testResult.ok ? "safeo-ok" : "safeo-err"}>{testResult.msg}</p>}
+        {testResult && <p className={testResult.ok ? "syra-ok" : "syra-err"}>{testResult.msg}</p>}
       </Drawer>
 
       <Drawer open={drawer === "custom"} title="Connect Custom ERP to SyRA" onClose={closeDrawer}>
         <p><strong>Step 1:</strong> Copy your API key</p>
-        <div className="safeo-key-row">
+        <div className="syra-key-row">
           <code>{apiKey}</code>
-          <button type="button" className="safeo-refresh-btn" onClick={copyKey}>Copy</button>
+          <button type="button" className="syra-refresh-btn" onClick={copyKey}>Copy</button>
         </div>
         <p><strong>Step 2:</strong> Python SDK</p>
-        <pre className="safeo-code">{`from syra_sdk import SyRAClient
+        <pre className="syra-code">{`from syra_sdk import SyRAClient
 
 client = SyRAClient(api_key="${apiKey}", base_url="${BACKEND_URL}")
 result = client.scan("user input", source_system="custom_erp")
 print(result.decision, result.risk_score)`}</pre>
         <p><strong>Step 3:</strong> Test connection</p>
-        <input className="safeo-input" placeholder="http://your-erp/health" value={testUrl} onChange={(e) => setTestUrl(e.target.value)} />
+        <input className="syra-input" placeholder="http://your-erp/health" value={testUrl} onChange={(e) => setTestUrl(e.target.value)} />
         <button type="button" className="sim-run-btn" onClick={() => runTest("custom")}>Test</button>
-        {testResult && <p className={testResult.ok ? "safeo-ok" : "safeo-err"}>{testResult.msg}</p>}
+        {testResult && <p className={testResult.ok ? "syra-ok" : "syra-err"}>{testResult.msg}</p>}
       </Drawer>
 
       <Drawer open={drawer === "webhook"} title="Connect via Webhook" onClose={closeDrawer}>
         <p><strong>Step 1:</strong> Copy your API key</p>
-        <div className="safeo-key-row">
+        <div className="syra-key-row">
           <code>{apiKey}</code>
-          <button type="button" className="safeo-refresh-btn" onClick={copyKey}>Copy</button>
+          <button type="button" className="syra-refresh-btn" onClick={copyKey}>Copy</button>
         </div>
         <p><strong>Step 2:</strong> Webhook curl</p>
-        <pre className="safeo-code">{`curl -X POST ${BACKEND_URL}/v1/scan \\
+        <pre className="syra-code">{`curl -X POST ${BACKEND_URL}/v1/scan \\
   -H "Authorization: Bearer ${apiKey}" \\
   -H "Content-Type: application/json" \\
   -d '{"input":"PAYLOAD_FROM_YOUR_SYSTEM","context":{"source_system":"webhook"}}'`}</pre>
         <p><strong>Step 3:</strong> Test connection</p>
-        <input className="safeo-input" placeholder="Webhook receiver URL" value={testUrl} onChange={(e) => setTestUrl(e.target.value)} />
+        <input className="syra-input" placeholder="Webhook receiver URL" value={testUrl} onChange={(e) => setTestUrl(e.target.value)} />
         <button type="button" className="sim-run-btn" onClick={() => runTest("webhook")}>Test</button>
-        {testResult && <p className={testResult.ok ? "safeo-ok" : "safeo-err"}>{testResult.msg}</p>}
+        {testResult && <p className={testResult.ok ? "syra-ok" : "syra-err"}>{testResult.msg}</p>}
       </Drawer>
     </div>
   );

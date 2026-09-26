@@ -1,23 +1,24 @@
-# SafeO — Architecture
+# SyRA — Architecture
 
 ## System diagram
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│  Odoo 19 (e.g. http://127.0.0.1:8069)                        │
-│  • OWL dashboard (static/src/js/dashboard.js)                │
-│  • JSON-RPC /safeo/*  →  proxies to FastAPI                  │
-│  • crm.lead inherit → POST /erp/crm/lead                     │
-│  • Models: safeo.erp.decision, securec.log, audit, …         │
+│  React website (http://127.0.0.1:5174)                        │
+│  • Landing / Demo / Connect / Dashboard                      │
+│  • Demo ERP (/erp-demo) → POST /v1/scan or /erp/*            │
+│  • Code-switch hero → GET /v1/demo/code-switch               │
 └────────────────────────────┬────────────────────────────────┘
                              │  HTTP  (default http://127.0.0.1:8001)
                              ▼
 ┌─────────────────────────────────────────────────────────────┐
-│  FastAPI — safeo_backend (SafeO/backend/safeo_backend)       │
+│  FastAPI — syra_backend (backend/syra_backend)               │
 │  routes/erp.py     — transaction, HR, CRM, finance, summary  │
+│  routes/universal.py — /v1/scan, demos                       │
 │  routes/waf.py     — legacy /waf/input + shared request log  │
 │  core/ml/*         — risk_scorer, entropy, keywords, n-gram  │
-│  agents/*          — input/output/behavior (CUSUM)           │
+│  core/sybil_detector.py — Swarm Guard / SYBIL_SUSPECT        │
+│  agents/*          — LangGraph investigation graph           │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -27,13 +28,14 @@
 |------------------|------|
 | `routes/` | FastAPI routers (HTTP surface) |
 | `core/ml/` | Risk engine: fusion scoring, patterns, optional LLM gate |
-| `agents/` | Pluggable scanners (WAF-style + behavior) |
+| `core/sybil_detector.py` | Multi-actor Swarm Guard |
+| `agents/` | Investigation graph (multilingual → policy/forensics → verifier → remediation) |
 | `models/` | Pydantic request/response schemas |
-| `utils/` | Reserved for small shared helpers |
+| `utils/` | Feedback DB and helpers |
 
-## Data flow (CRM lead)
+## Data flow (Demo ERP)
 
-1. User submits lead in Odoo.
-2. `crm_lead.py` builds text, POSTs to FastAPI `/erp/crm/lead`.
-3. Engine returns ALLOW / WARN / BLOCK + score.
-4. Odoo saves or blocks; may log `safeo.erp.decision` / `securec.log`.
+1. User submits a form in Demo ERP (`/erp-demo`).
+2. Frontend POSTs text to FastAPI `/v1/scan` (or `/erp/*`).
+3. Engine returns ALLOW / WARN / BLOCK + score (+ Sybil flags when relevant).
+4. Demo ERP shows the decision inline; blocked rows are not “persisted.”
