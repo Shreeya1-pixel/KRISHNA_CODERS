@@ -16,7 +16,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from .routes import waf, simulate, feedback, metrics, erp, investigations, universal, workflows, visual, logs
+from .routes import waf, simulate, feedback, metrics, erp, investigations, universal, workflows, visual, logs, adapters
 from .routes.visual import DEMO_PHISHING_HTML
 from fastapi.responses import HTMLResponse
 from .routers import ws as ws_router
@@ -65,6 +65,7 @@ app.include_router(metrics.ml_router)
 app.include_router(erp.router)
 app.include_router(investigations.router)
 app.include_router(universal.router)
+app.include_router(adapters.router)
 app.include_router(workflows.router)
 app.include_router(visual.router)
 app.include_router(logs.router)

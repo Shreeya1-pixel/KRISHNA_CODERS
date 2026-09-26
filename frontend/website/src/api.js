@@ -61,6 +61,30 @@ export async function fetchCodeSwitchDemo() {
   return res.json();
 }
 
+export async function fetchCodeSwitchEval() {
+  const res = await fetch(`${API}/v1/eval/code-switch`, {
+    headers: { Authorization: `Bearer ${getApiKey()}` },
+  });
+  if (!res.ok) throw new Error("Eval run failed");
+  return res.json();
+}
+
+export async function postSapWebhook(body) {
+  const res = await fetch(`${API}/v1/adapters/sap/webhook`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getApiKey()}`,
+    },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || "SAP webhook stub failed");
+  }
+  return res.json();
+}
+
 export async function testEndpoint(url) {
   try {
     const res = await fetch(url, { method: "GET", signal: AbortSignal.timeout(5000) });

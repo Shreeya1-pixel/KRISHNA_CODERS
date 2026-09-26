@@ -16,6 +16,7 @@ from pydantic import BaseModel, Field
 
 from ..agents.behavior_agent import behavioural_risk_score
 from ..core.demo_corpus import get_code_switch_corpus
+from ..core.eval_corpus import get_full_eval_samples, summarize_eval
 from ..core.ml.llm_guard import is_llm_available, llm_assess_payload, llm_enabled
 from ..core.ml.risk_scorer import calculate_risk_score
 from ..core.ml.tiered_llm import run_tiered_scoring
@@ -254,6 +255,43 @@ async def scan_batch(req: BatchScanRequest):
 async def demo_code_switch():
     """Hero demo corpus: code-switching / spell-by-ear / mixed-script samples."""
     return get_code_switch_corpus()
+
+
+@router.get("/eval/code-switch")
+async def eval_code_switch():
+    """
+    Run labeled Theme-01 eval (hero + extended, n>12) against the live engine.
+
+    Returns precision / recall / FPR for attack detection (non-ALLOW = positive).
+    Clearly a demo/eval set — not a production benchmark.
+    """
+    samples = get_full_eval_samples()
+    rows: List[Dict[str, Any]] = []
+    for s in samples:
+        ctx = ScanContext(
+            user_id="eval_harness",
+            source_system="eval_corpus",
+            field_name="eval",
+            agent_id="eval_runner",
+        )
+        result = await _run_scan(s["input"], ctx)
+        rows.append(
+            {
+                "id": s["id"],
+                "label": s.get("label"),
+                "expected_decision": s["expected_decision"],
+                "got_decision": result.get("decision"),
+                "risk_score": result.get("risk_score"),
+                "scan_id": result.get("scan_id"),
+            }
+        )
+    summary = summarize_eval(rows)
+    return {
+        "theme": "code-switching & spelling by ear",
+        "hero_corpus_n": 12,
+        "summary": summary,
+        "rows": rows,
+    }
 
 
 @router.get("/sybil/stats")

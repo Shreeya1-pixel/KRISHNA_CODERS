@@ -102,8 +102,9 @@ export default function Connect() {
       <div className="syra-page-header">
         <h2>Connect to Your ERP System</h2>
         <p>
-          SyRA works as a security layer in front of any ERP. Use <strong>Demo ERP</strong> for
-          live demos and testing — no external ERP install required.
+          SyRA sits in front of any system that can HTTP POST. <strong>Demo ERP</strong> is the
+          in-app test harness; <strong>SAP webhook stub</strong> is a second live-tested HTTP
+          shape — not a certified SAP connector.
         </p>
       </div>
 
@@ -137,16 +138,31 @@ export default function Connect() {
 
         <ErpCard
           icon="SAP"
-          name="SAP"
-          status="○ Not connected"
-          statusClass="idle"
+          name="SAP webhook stub"
+          status={syraUp ? "● Live-tested adapter" : "○ SyRA offline"}
+          statusClass={syraUp ? "connected" : "idle"}
           primary={
-            <button type="button" className="sim-run-btn" onClick={() => setDrawer("sap")}>
-              Connect via REST API
+            <button
+              type="button"
+              className="sim-run-btn"
+              disabled={!syraUp}
+              onClick={() => {
+                showToast("Opening SAP webhook stub…");
+                navigate("/erp-sap-stub");
+              }}
+            >
+              Open SAP stub →
+            </button>
+          }
+          secondary={
+            <button type="button" className="syra-btn-muted" onClick={() => setDrawer("sap")}>
+              Curl / production shape
             </button>
           }
         >
-          <p className="syra-muted">Enterprise SAP integration via SyRA REST API</p>
+          <p className="syra-muted">
+            Second ERP target: <code>POST /v1/adapters/sap/webhook</code> → SyRA. Stub only.
+          </p>
         </ErpCard>
 
         <ErpCard
@@ -192,26 +208,21 @@ export default function Connect() {
         </ErpCard>
       </div>
 
-      <Drawer open={drawer === "sap"} title="Connect SAP to SyRA" onClose={closeDrawer}>
-        <p><strong>Step 1:</strong> Copy your API key</p>
-        <div className="syra-key-row">
-          <code>{apiKey}</code>
-          <button type="button" className="syra-refresh-btn" onClick={copyKey}>Copy</button>
-        </div>
-        <p><strong>Step 2:</strong> Add this to your SAP system</p>
+      <Drawer open={drawer === "sap"} title="SAP → SyRA (stub + production shape)" onClose={closeDrawer}>
+        <p>
+          <strong>Live stub:</strong> open{" "}
+          <Link to="/erp-sap-stub">/erp-sap-stub</Link> or call the adapter below. Not a certified
+          SAP product — proves a second HTTP ERP shape.
+        </p>
+        <pre className="syra-code">{`curl -X POST ${BACKEND_URL}/v1/adapters/sap/webhook \\
+  -H "Authorization: Bearer ${apiKey}" \\
+  -H "Content-Type: application/json" \\
+  -d '{"eventType":"BusinessPartner.Changed","sapSystemId":"S4HANA-DEMO","userId":"SAP_BP","note":"3tini admin access"}'`}</pre>
+        <p><strong>Generic production shape</strong> (any SAP middleware that can HTTP POST):</p>
         <pre className="syra-code">{`curl -X POST ${BACKEND_URL}/v1/scan \\
   -H "Authorization: Bearer ${apiKey}" \\
   -H "Content-Type: application/json" \\
   -d '{"input":"{{payload}}","context":{"source_system":"sap","user_id":"{{user}}"}}'`}</pre>
-        <p><strong>Step 3:</strong> Test connection</p>
-        <input
-          className="syra-input"
-          placeholder="https://your-sap-gateway/health"
-          value={testUrl}
-          onChange={(e) => setTestUrl(e.target.value)}
-        />
-        <button type="button" className="sim-run-btn" onClick={() => runTest("sap")}>Test</button>
-        {testResult && <p className={testResult.ok ? "syra-ok" : "syra-err"}>{testResult.msg}</p>}
       </Drawer>
 
       <Drawer open={drawer === "salesforce"} title="Connect Salesforce to SyRA" onClose={closeDrawer}>

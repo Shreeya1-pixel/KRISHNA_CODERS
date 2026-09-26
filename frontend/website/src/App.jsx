@@ -11,6 +11,7 @@ import Chatbot from "./pages/Chatbot";
 import VisualDemo from "./pages/VisualDemo";
 import CodeSwitchDemo from "./pages/CodeSwitchDemo";
 import DemoERP from "./pages/DemoERP";
+import SapWebhookStub from "./pages/SapWebhookStub";
 import { fetchBackendHealth } from "./api";
 import { applyGlareMode, getGlareMode } from "./components/GlareToggle";
 import "./styles/syra.css";
@@ -30,6 +31,8 @@ export default function App() {
           <Route path="/" element={<Landing />} />
           {/* Full-bleed Demo ERP (testing environment) — no SyRA chrome */}
           <Route path="/erp-demo" element={<DemoERP />} />
+          {/* Second live ERP target — SAP-shaped webhook stub */}
+          <Route path="/erp-sap-stub" element={<SapWebhookStub />} />
           <Route
             path="/*"
             element={

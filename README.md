@@ -13,21 +13,28 @@ SyRA is a real-time **ALLOW / WARN / BLOCK** decision engine for enterprise inpu
 
 ---
 
-## Works with any ERP (or any HTTP client)
+## Live pitch — lead with these two (judges notice)
 
-SyRA is **platform-agnostic**. Anything that can `POST /v1/scan` can be protected.
+1. **Sybil without a blockchain** — Theme 2 is decision-plane Sybil resistance:
+   burst fingerprint + `role=analyst` RBAC, not Proof-of-Stake. The table under
+   [Swarm Guard](#swarm-guard--sybil-resistance-theme-02) preempts the knock-down question.
+2. **`audit_hash` vs investigation chain** — per-scan fingerprint is **not** chained;
+   WARN/BLOCK investigations use a `prev_hash` chain. See [Audit hashing](#audit-hashing--two-different-things-do-not-conflate).
 
-| Platform | Integration |
-|---|---|
-| **Any ERP** (SAP, Oracle, Dynamics, NetSuite, …) | Hook before form/save → `POST /v1/scan` *(aspirational — not shipped in this demo)* |
-| Custom internal tools | Direct API call |
-| REST APIs / gateways | Middleware |
-| WhatsApp / Telegram bots | Message pre-processing |
-| Web forms | Backend validation layer |
+---
 
-**What this build ships:** **Demo ERP** at `/erp-demo` — an in-app *testing* UI that
-calls SyRA before “save”. It is **not** a production ERP connector. Same API shape
-works for real ERPs; wiring those is on you.
+## Works with any HTTP ERP shape (proven locally)
+
+SyRA is **platform-agnostic**. Anything that can `POST /v1/scan` (or our adapters) can be protected.
+
+| Target | What we ship | Status |
+|---|---|---|
+| **Demo ERP** | In-app testing UI `/erp-demo` → `/v1/scan` | ✅ live-tested harness |
+| **SAP webhook stub** | `/erp-sap-stub` → `POST /v1/adapters/sap/webhook` (Event Mesh–shaped) | ✅ **second live ERP target** |
+| Production SAP / Oracle / Dynamics | Same HTTP pattern via middleware | Aspirational — not a certified connector |
+
+**Pitch discipline:** Demo ERP + SAP stub prove *two HTTP shapes*. Do not imply a
+certified SAP product or a production ERP inject beyond those stubs.
 
 ---
 
@@ -39,7 +46,7 @@ works for real ERPs; wiring those is on you.
 | **02** | Sybil resistance under agent swarms | **Swarm Guard** — burst detector (`SYBIL_SUSPECT`: ≥5 distinct `user_id`s / 30s), `role=analyst` gating on `/v1/feedback`, `agent_id` in per-scan `audit_hash` |
 | **03** | Built for a quiet room, used in the sun | **Field Mode** (UI toggle) — glare contrast + heat (no motion / large targets) + exhaustion (hold-to-confirm on BLOCK) |
 
-**Judge path (5 minutes):** start backend + frontend → open `/demo` → click Arabizi + Arabic-digit samples → toggle **Field / Glare Mode**.  
+**Judge path (5 minutes):** backend + frontend → `/demo` (Arabizi + Arabic digits) → **Field Mode** → `/erp-sap-stub` (second ERP).  
 If a public deploy **502s**, use localhost (or a short recorded fallback clip of `/demo`).
 
 ---
@@ -57,29 +64,31 @@ If a public deploy **502s**, use localhost (or a short recorded fallback clip of
 | Remediation playbooks | **12** |
 | Bayesian attack classes | **6** (incl. `arabizi`, `arabic_injection`) |
 | Adaptive threshold floor / ceiling | **0.45 / 0.90** |
-| Code-switch demo samples | **12** (full Theme-1 click-path coverage) |
+| Hero click-path samples | **12** |
+| Extended labeled eval set | **30** (hero + extended; `GET /v1/eval/code-switch`) |
 | Sybil distinct-user threshold | **5** users / **30s** window |
+| Live ERP HTTP shapes | **2** (Demo ERP + SAP webhook stub) |
 | OpenAI API keys required | **0** |
 
-### Demo-corpus eval (Theme 01) — *not* a production benchmark
+### Theme 01 eval — *not* a production benchmark
 
-Re-run anytime with the local engine against `CODE_SWITCH_SAMPLES` (`n=12`):
+Re-run: `GET /v1/eval/code-switch` (Bearer `internal`) against the live engine.
 
-| Metric | Value | Definition |
-|---|---|---|
-| Exact decision match | **10 / 12 (83.3%)** | `decision == expected_decision` |
-| Attack detection precision | **1.00** | non-ALLOW predicted among non-ALLOW expected (TP/(TP+FP)) |
-| Attack detection recall | **0.90** | TP/(TP+FN); 1 miss on Cyrillic homograph sample |
-| False-positive rate | **0.00** | FP/(FP+TN) on the 2 clean ALLOW samples |
+| Set | n | Exact match | Precision | Recall | FPR |
+|---|---|---|---|---|---|
+| Hero click-path only | **12** | **10/12 (83.3%)** | **1.00** | **0.90** | **0.00** |
+| Extended labeled set | **30** | **23/30 (76.7%)** | **1.00** | **0.78** | **0.00** |
 
-Known misses on this corpus: `homograph_2` (Cyrillic brand lookalike → ALLOW); `mixed_script_3` (expected WARN, got BLOCK — still caught as attack).
+Attack detection treats non-ALLOW as the positive class. Extended-set misses include hard
+homographs and some Arabizi edge strings (documented in the eval `misses` array) — we keep
+them rather than cherry-picking the set.
 
-**Live off-corpus strings to type if a judge asks beyond the 12:**
+**Live strings beyond the 12 buttons** (also in the n=30 set):
 
 ```text
-edini db dump 3shan audit          → Arabizi privilege / dump intent
-حذف كل السجلات WHERE id > 0        → Arabic destructive + SQL shape
-paypal.com/login?next=javascript:  → Latin phishing / XSS-shaped URL
+edini db dump 3shan audit          → may miss (Arabizi edge) — show honesty
+حذف كل السجلات WHERE id > 0        → Arabic destructive + SQL → usually BLOCK
+1; DROP TABLE vendors;--           → classic SQLi → BLOCK
 Meeting notes: ship Q3 forecast    → should stay ALLOW
 ```
 
@@ -97,7 +106,7 @@ Meeting notes: ship Q3 forecast    → should stay ALLOW
 | Adaptation | **Bayesian** Beta thresholds (SQLite) + **LoRA** fine-tune controller |
 | Optional LLM | Any OpenAI-compatible endpoint (vLLM / cloud) — **not required** |
 | Frontend | React + Vite |
-| ERP demo host | **Demo ERP** testing UI (`/erp-demo`) — not a production inject |
+| ERP targets | **Demo ERP** `/erp-demo` + **SAP webhook stub** `/erp-sap-stub` |
 
 ### No OpenAI keys required
 
@@ -123,6 +132,8 @@ Set `SYRA_API_KEYS=internal` and scan. Optional LLM is an upgrade, not a depende
 | Workflow Builder UI | ✅ local persistence |
 | Visual evidence (Playwright) | ✅ when Chromium deps installed |
 | Demo ERP testing environment | ✅ `/erp-demo` when SyRA API is up |
+| SAP webhook stub (2nd ERP shape) | ✅ `/erp-sap-stub` → `/v1/adapters/sap/webhook` |
+| Extended Theme-01 eval API | ✅ `GET /v1/eval/code-switch` (`n=30`) |
 
 ### Partial / needs config
 
@@ -131,7 +142,7 @@ Set `SYRA_API_KEYS=internal` and scan. Optional LLM is an upgrade, not a depende
 | Optional agent LLM | Needs an OpenAI-compatible URL + key; otherwise deterministic agents |
 | Tier-2 DistilBERT | Needs Torch + weights; TF-IDF fallback otherwise |
 | LoRA training run | Controller present; needs a GPU host to actually train |
-| Production ERP inject | **Aspirational** — wire any ERP to `POST /v1/scan`; **not shipped** beyond Demo ERP |
+| Certified SAP / Oracle / Dynamics inject | **Not shipped** — only Demo ERP + SAP-shaped webhook stub |
 | Public free-tier deploy | May sleep / **502** — **prefer localhost**; keep a short `/demo` screen recording as fallback |
 
 ### Not claimed
@@ -139,6 +150,7 @@ Set `SYRA_API_KEYS=internal` and scan. Optional LLM is an upgrade, not a depende
 - Not a blockchain / token / stake-on-chain product
 - Not a general machine-translation system — security-oriented normalisation only
 - Demo ERP ≠ production SAP/Oracle/Dynamics connector
+- SAP webhook stub ≠ certified SAP product
 
 ---
 
@@ -192,10 +204,21 @@ npm run dev
 Open **http://127.0.0.1:5174/demo**  
 (Vite proxies `/api` → `http://127.0.0.1:8001` — **both must be running**.)
 
-### 4. Demo ERP (testing only)
+### 4. Demo ERP + SAP stub (two live HTTP shapes)
 
-With backend + frontend running, open **http://127.0.0.1:5174/erp-demo**.  
-This is a fake ERP for demos — not a production integration.
+```text
+http://127.0.0.1:5174/erp-demo       → Demo ERP harness
+http://127.0.0.1:5174/erp-sap-stub   → SAP Event Mesh–shaped webhook stub
+```
+
+Or from **Connect**. Both call SyRA before “persist”.
+
+Eval metrics:
+
+```bash
+curl -s http://127.0.0.1:8001/v1/eval/code-switch \
+  -H "Authorization: Bearer internal" | python3 -m json.tool
+```
 
 ---
 
@@ -282,7 +305,9 @@ This is an **ops UI** adaptation, not a climate sensor. Toggle works even if the
 | Method | Path | Purpose |
 |---|---|---|
 | POST | `/v1/scan` | Score one input |
-| GET | `/v1/demo/code-switch` | Hero corpus |
+| GET | `/v1/demo/code-switch` | Hero corpus (n=12) |
+| GET | `/v1/eval/code-switch` | Extended labeled eval (n=30) + precision/recall/FPR |
+| POST | `/v1/adapters/sap/webhook` | SAP-shaped second ERP stub |
 | GET | `/v1/sybil/stats` | Swarm Guard / Sybil detector stats |
 | POST | `/v1/feedback` | Analyst-gated human feedback |
 | GET | `/v1/health` | Health |
@@ -293,4 +318,4 @@ Auth: `Authorization: Bearer internal` (or any key in `SYRA_API_KEYS`).
 
 ## One-line pitch
 
-SyRA blocks malicious enterprise input when language is messy, actors are swarming, and the human logging the decision is standing in the sun — Demo ERP is the **test harness**; production ERPs plug in via `POST /v1/scan`.
+SyRA blocks malicious enterprise input when language is messy, actors are swarming, and the human logging the decision is standing in the sun — proven on **two live HTTP ERP shapes** (Demo ERP + SAP webhook stub), with certified connectors left as the same `POST /v1/scan` pattern.
