@@ -130,7 +130,10 @@ async def _run_scan(input_text: str, context: ScanContext) -> Dict[str, Any]:
             )
 
     decision = _decision_label(final_score, patterns, meta.get("script_detected", "latin"))
-    tier2_score = tier_meta.get("tier2_score") if tier_used == 2 else None
+    advisory = tier_meta.get("tier2_advisory") or {}
+    tier2_score = tier_meta.get("tier2_score")
+    if tier2_score is None and advisory.get("tier2_score") is not None:
+        tier2_score = advisory.get("tier2_score")
     attack_class = infer_attack_class(patterns, meta.get("script_detected", "latin"))
     block_threshold = get_bayesian_engine().get_block_threshold(attack_class)
 
@@ -142,9 +145,11 @@ async def _run_scan(input_text: str, context: ScanContext) -> Dict[str, Any]:
         "risk_score_pct": round(final_score * 100),
         "decision": decision,
         "tier1_score": round(tier1_score, 3),
-        "tier2_score": round(tier2_score, 3) if tier2_score is not None else None,
+        "tier2_score": round(float(tier2_score), 3) if tier2_score is not None else None,
         "llm_score": round(llm_score, 3) if llm_score is not None else None,
         "tier_used": tier_used,
+        "tier2_backend": tier_meta.get("tier2_backend") or advisory.get("backend"),
+        "tier_reason": tier_meta.get("reason"),
         "attack_class": attack_class,
         "block_threshold": round(block_threshold, 4),
         "matched_patterns": patterns[:10],
@@ -288,7 +293,7 @@ async def eval_code_switch():
     summary = summarize_eval(rows)
     return {
         "theme": "code-switching & spelling by ear",
-        "hero_corpus_n": 12,
+        "hero_corpus_n": len(get_code_switch_corpus().get("samples") or []),
         "summary": summary,
         "rows": rows,
     }
@@ -311,10 +316,12 @@ async def v1_health():
         pass
 
     tier2_loaded = False
+    tier2_backend = "unavailable"
     try:
         from ..core.ml.tier2_classifier import get_tier2_classifier
         clf = get_tier2_classifier()
-        tier2_loaded = clf._ready
+        tier2_loaded = bool(clf._ready)
+        tier2_backend = clf.backend()
     except Exception:
         pass
 
@@ -325,16 +332,39 @@ async def v1_health():
     except Exception:
         pass
 
+    lora_status: Dict[str, Any] = {}
+    try:
+        from ..core.ml.lora_finetune_controller import get_lora_controller_status, decide_lora_finetune
+        # Live controller always callable (no GPU) — demonstrates the gate exists
+        lora_status = {
+            "controller_ready": True,
+            "status": get_lora_controller_status(),
+            "sample_decision": decide_lora_finetune({}),
+        }
+    except Exception as exc:
+        lora_status = {"controller_ready": False, "error": str(exc)}
+
     return {
         "status": "ok",
         "gpu_available": gpu_available,
         "vllm_available": is_llm_available(),
         "tier2_loaded": tier2_loaded,
+        "tier2_backend": tier2_backend,
         "multilingual_model_loaded": ml_loaded,
+        "lora": lora_status,
         "uptime_seconds": round(time.time() - _START_TIME, 1),
         "agent_orchestrator": "langgraph_local",
         "last_forensics_model_used": _last_forensics_model(),
         "sybil": get_sybil_detector().stats(),
+        "live_path": {
+            "tier1_heuristics": True,
+            "tier2": tier2_loaded,
+            "tier3_llm": bool(is_llm_available() and llm_enabled()),
+            "swarm_guard": True,
+            "demo_erp": True,
+            "sap_webhook_stub": True,
+            "eval_harness": True,
+        },
     }
 
 

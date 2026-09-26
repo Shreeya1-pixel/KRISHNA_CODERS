@@ -50,12 +50,26 @@ def run_tiered_scoring(
     """
     _record_tier(0)  # counts total requests before tier decision
 
+    advisory: Dict[str, Any] = {}
+    try:
+        from .tier2_classifier import get_tier2_classifier
+        clf = get_tier2_classifier()
+        if clf._ready:
+            advisory = clf.classify(text)
+            advisory = {**advisory, "role": "advisory"}
+    except Exception as exc:
+        logger.debug("tier2 advisory skipped: %s", exc)
+
     # ── Tier 1 — decisive bands ──────────────────────────────────────────────
     if risk_score < TIER2_BAND_LOW or risk_score > TIER2_BAND_HIGH:
         _record_tier(1)
-        return risk_score, 1, {"tier": 1, "reason": "heuristic_decisive"}
+        meta = {"tier": 1, "reason": "heuristic_decisive"}
+        if advisory:
+            meta["tier2_advisory"] = advisory
+            meta["tier2_backend"] = advisory.get("backend")
+        return risk_score, 1, meta
 
-    # ── Tier 2 — distilBERT on uncertain band ────────────────────────────────
+    # ── Tier 2 — distilBERT / TF-IDF on uncertain band ───────────────────────
     try:
         from .tier2_classifier import get_tier2_classifier
         clf = get_tier2_classifier()
@@ -67,18 +81,27 @@ def run_tiered_scoring(
             # Blend: 40% tier-1 heuristic + 60% tier-2 neural
             adjusted = round(0.40 * risk_score + 0.60 * t2["tier2_score"], 3)
             _record_tier(2)
-            return adjusted, 2, {"tier": 2, **t2}
+            return adjusted, 2, {"tier": 2, "tier2_backend": t2.get("backend"), **t2}
+        advisory = {**t2, "role": "low_confidence"}
     except Exception as exc:
         logger.warning("tier2 skipped: %s", exc)
 
     # ── Tier 3 — local vLLM (only if available) ──────────────────────────────
     if llm_enabled() and is_llm_available():
         _record_tier(3)
-        return risk_score, 3, {"tier": 3, "reason": "gray_zone_escalated_to_llm"}
+        meta = {"tier": 3, "reason": "gray_zone_escalated_to_llm"}
+        if advisory:
+            meta["tier2_advisory"] = advisory
+            meta["tier2_backend"] = advisory.get("backend")
+        return risk_score, 3, meta
 
     # No tier-3 available — resolve with tier-1 score
     _record_tier(1)
-    return risk_score, 1, {"tier": 1, "reason": "tier3_unavailable_fallback"}
+    meta = {"tier": 1, "reason": "tier3_unavailable_fallback"}
+    if advisory:
+        meta["tier2_advisory"] = advisory
+        meta["tier2_backend"] = advisory.get("backend")
+    return risk_score, 1, meta
 
 
 def should_invoke_llm(risk_score: float, patterns: List[str], text: str) -> Tuple[bool, str]:

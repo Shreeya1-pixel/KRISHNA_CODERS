@@ -37,6 +37,7 @@ export default function Layout({ children }) {
         </Link>
         <nav className="syra-nav">
           {navLink("/demo", "Code-Switch")}
+          {navLink("/eval", "Eval")}
           {navLink("/erp-demo", "Demo ERP")}
           {navLink("/app", "Dashboard")}
           {navLink("/connect", "Connect ERP")}

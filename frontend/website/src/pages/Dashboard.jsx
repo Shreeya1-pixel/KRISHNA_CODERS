@@ -16,17 +16,20 @@ export default function Dashboard() {
   const [stats, setStats] = useState(null);
   const [syraUp, setSyraUp] = useState(false);
   const [connectedCount, setConnectedCount] = useState(0);
+  const [health, setHealth] = useState(null);
 
   useEffect(() => {
     const refresh = async () => {
       let up = false;
       try {
-        await fetchBackendHealth();
+        const h = await fetchBackendHealth();
+        setHealth(h);
         up = true;
         setSyraUp(true);
         markErpConnected("demo_erp", { url: "/erp-demo" });
       } catch {
         setSyraUp(false);
+        setHealth(null);
       }
       try {
         const full = await fetchFullStats();
@@ -43,16 +46,32 @@ export default function Dashboard() {
   }, []);
 
   const summary = stats?.summary || {};
+  const live = health?.live_path || {};
 
   return (
     <div className="syra-page">
       <div className="syra-page-header">
         <h2>Business Risk Dashboard</h2>
         <p>
-          Real-time business risk decisions. Use{" "}
-          <Link to="/erp-demo">Demo ERP</Link> for the live testing environment.
+          Real-time decisions.{" "}
+          <Link to="/erp-demo">Demo ERP</Link> · <Link to="/erp-sap-stub">SAP stub</Link> ·{" "}
+          <Link to="/eval">Eval harness</Link>
         </p>
       </div>
+
+      {health && (
+        <div className="syra-card" style={{ marginBottom: 16 }}>
+          <h3>Live engine path (what is running now)</h3>
+          <p className="syra-muted">
+            Tier-1 heuristics {live.tier1_heuristics ? "✅" : "○"} · Tier-2{" "}
+            {live.tier2 ? `✅ ${health.tier2_backend}` : "○"} · Tier-3 LLM{" "}
+            {live.tier3_llm ? "✅" : "○ off (optional)"} · Swarm Guard{" "}
+            {live.swarm_guard ? "✅" : "○"} · LoRA controller{" "}
+            {health.lora?.controller_ready ? "✅ gate live" : "○"} · SAP stub{" "}
+            {live.sap_webhook_stub ? "✅" : "○"}
+          </p>
+        </div>
+      )}
 
       <div className="syra-stat-grid">
         <StatCard label="Total Scans" value={summary.total_scans ?? "—"} />

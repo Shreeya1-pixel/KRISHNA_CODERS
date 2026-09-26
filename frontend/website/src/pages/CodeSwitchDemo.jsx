@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { getApiKey } from "../utils/connections";
+import { fetchBackendHealth } from "../api";
 import "../styles/codeswitch.css";
 
 const API = import.meta.env.VITE_API_URL || "/api";
@@ -98,6 +100,7 @@ export default function CodeSwitchDemo() {
   const [active, setActive] = useState(null);
   const [blockArmed, setBlockArmed] = useState(false);
   const [backendOk, setBackendOk] = useState(null);
+  const [engine, setEngine] = useState(null);
   const holdTimer = useRef(null);
 
   useEffect(() => {
@@ -114,6 +117,9 @@ export default function CodeSwitchDemo() {
           `${e.message} Using local sample list — start the API on port 8001, then click a payload.`
         );
       });
+    fetchBackendHealth()
+      .then(setEngine)
+      .catch(() => setEngine(null));
   }, []);
 
   const run = useCallback(async (sample) => {
@@ -162,6 +168,12 @@ export default function CodeSwitchDemo() {
           </p>
         )}
         {backendOk === true && <p className="cs-backend-ok">Engine online — click a payload.</p>}
+        {engine?.live_path && (
+          <p className="cs-backend-ok">
+            Live path: Tier-1 · Tier-2 ({engine.tier2_backend || "—"}) · Swarm Guard ·{" "}
+            <Link to="/eval">open eval harness</Link>
+          </p>
+        )}
       </header>
 
       {error && (
@@ -236,6 +248,16 @@ export default function CodeSwitchDemo() {
                 <div>
                   <dt>Script</dt>
                   <dd>{result.script_detected || "—"}</dd>
+                </div>
+                <div>
+                  <dt>Tier path</dt>
+                  <dd>
+                    decided T{result.tier_used ?? "?"}
+                    {result.tier1_score != null && ` · T1 ${(result.tier1_score * 100).toFixed(0)}%`}
+                    {result.tier2_score != null &&
+                      ` · T2 ${(result.tier2_score * 100).toFixed(0)}% (${result.tier2_backend || "—"})`}
+                    {result.tier_reason ? ` · ${result.tier_reason}` : ""}
+                  </dd>
                 </div>
                 <div>
                   <dt>Attack class</dt>

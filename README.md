@@ -88,7 +88,7 @@ Open http://127.0.0.1:5174/demo · Auth: `Authorization: Bearer internal`.
 
 Demo ERP + SAP stub prove *two HTTP shapes*. They are not certified ERP products.
 
-**Walkthrough (~5 minutes):** [SETUP.md](SETUP.md) → `/demo` → Field Mode → `/erp-sap-stub`.  
+**Walkthrough (~5 minutes):** [SETUP.md](SETUP.md) → `/demo` → Field Mode → `/eval` (live metrics) → `/erp-sap-stub`.  
 If a public deploy **502s**, use localhost (or a short recorded fallback clip of `/demo`).
 
 ---

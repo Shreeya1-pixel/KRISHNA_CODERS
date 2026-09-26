@@ -12,6 +12,7 @@ import VisualDemo from "./pages/VisualDemo";
 import CodeSwitchDemo from "./pages/CodeSwitchDemo";
 import DemoERP from "./pages/DemoERP";
 import SapWebhookStub from "./pages/SapWebhookStub";
+import EvalLab from "./pages/EvalLab";
 import { fetchBackendHealth } from "./api";
 import { applyGlareMode, getGlareMode } from "./components/GlareToggle";
 import "./styles/syra.css";
@@ -45,6 +46,7 @@ export default function App() {
                   <Route path="/chat" element={<Chatbot />} />
                   <Route path="/visual" element={<VisualDemo />} />
                   <Route path="/demo" element={<CodeSwitchDemo />} />
+                  <Route path="/eval" element={<EvalLab />} />
                 </Routes>
               </Layout>
             }
