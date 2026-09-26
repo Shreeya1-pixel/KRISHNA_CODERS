@@ -89,7 +89,7 @@ UI: `/eval` · API: `GET /v1/eval/code-switch`.
 | Hero click-path (subset) | 13 | 10/13 (76.9%) | 1.00 | 0.82 | 0.00 |
 
 The n=13 row is the `/demo` walkthrough slice — convenient to click, not the
-headline. Leading with the hero rate would oversell; **74.2% on n=31 is the claim.**
+headline. Leading with 76.9% would oversell; **74.2% on n=31 is the claim.**
 
 **What the misses show (this is the linguistic signal):** 8 misses cluster in two
 patterns — rare homograph substitutions and low-frequency Arabizi spellings outside
