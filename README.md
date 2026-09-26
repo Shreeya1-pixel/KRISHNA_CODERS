@@ -162,20 +162,23 @@ Meeting notes: ship Q3 forecast    → should stay ALLOW
 | Field Mode UI toggle | ✅ |
 | Per-scan SHA-256 `audit_hash` | ✅ |
 | Investigation SHA-256 hash **chain** (`prev_hash`) | ✅ on WARN/BLOCK investigations |
+| **Tier-2 live** (TF-IDF / pure-Python; DistilBERT when Torch present) | ✅ default — `tier2_backend` on every scan |
+| **LoRA controller gate** (`/ml/lora-finetune/status`) | ✅ decision API live without GPU |
+| Live eval UI (`/eval`) + `GET /v1/eval/code-switch` | ✅ |
+| Engine live-path strip (Dashboard + `/v1/health`) | ✅ |
 | Jira escalation from Logs | ✅ when env vars set |
 | Workflow Builder UI | ✅ local persistence |
 | Visual evidence (Playwright) | ✅ when Chromium deps installed |
 | Demo ERP testing environment | ✅ `/erp-demo` when SyRA API is up |
 | SAP webhook stub (2nd ERP shape) | ✅ `/erp-sap-stub` → `/v1/adapters/sap/webhook` |
-| Extended Theme-01 eval API | ✅ `GET /v1/eval/code-switch` (`n=30`) |
 
 ### Partial / needs config
 
 | Feature | Reality |
 |---|---|
-| Optional agent LLM | Needs an OpenAI-compatible URL + key; otherwise deterministic agents |
-| Tier-2 DistilBERT | Needs Torch + weights; TF-IDF fallback otherwise |
-| LoRA training run | Controller present; needs a GPU host to actually train |
+| Optional agent LLM (Tier-3) | Needs OpenAI-compatible URL + key; otherwise Tier-1+2 only |
+| Tier-2 DistilBERT weights | Needs Torch; **TF-IDF / pure-Python Tier-2 still runs** |
+| LoRA *training* job | Controller + gate are live; GPU train step is optional |
 | Certified SAP / Oracle / Dynamics inject | **Not shipped** — only Demo ERP + SAP-shaped webhook stub |
 | Public free-tier deploy | May sleep / **502** — **prefer localhost**; keep a short `/demo` screen recording as fallback |
 
