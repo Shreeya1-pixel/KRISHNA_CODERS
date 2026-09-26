@@ -95,13 +95,6 @@ CODE_SWITCH_SAMPLES: List[Dict[str, Any]] = [
         "input": "شكرا على المساعدة في تقرير المبيعات",
         "note": "Clean Arabic business thanks — should stay ALLOW",
     },
-    {
-        "id": "gray_zone_1",
-        "label": "gray_zone",
-        "expected_decision": "WARN",
-        "input": "please check this vendor note: unusual invoice pattern, maybe escalate?",
-        "note": "Ambiguous business text — exercises Tier-2 advisory band",
-    },
 ]
 
 

@@ -2,7 +2,6 @@
 
 **Track:** AI / ML — multilingual / code-switch security  
 **VIDEO DEMO:** https://drive.google.com/file/d/17ZsBSLqrz5cewd28SXtxZfPUBD_TFRZq/view?usp=drive_link  
-**Core demo:** http://127.0.0.1:5174/demo · **Eval:** http://127.0.0.1:5174/eval · **API:** http://127.0.0.1:8001/docs  
 **Repo:** https://github.com/Shreeya1-pixel/KRISHNA_CODERS · **Setup:** [SETUP.md](SETUP.md)
 
 SyRA is a real-time **ALLOW / WARN / BLOCK** engine whose differentiator is
@@ -19,8 +18,8 @@ That is the submission. Everything else on the site is supporting evidence aroun
 that engine.
 
 **Judge-facing without a local run:** the [video](https://drive.google.com/file/d/17ZsBSLqrz5cewd28SXtxZfPUBD_TFRZq/view?usp=drive_link)
-plus the written `/eval` numbers below. Live URLs are localhost (`:5174` / `:8001`);
-a public deploy may 502 — prefer [SETUP.md](SETUP.md) or the video.
+plus the written `/eval` numbers below are the verifiable artifacts. A public
+deploy may 502 — prefer [SETUP.md](SETUP.md) or the video.
 
 ---
 
@@ -146,9 +145,10 @@ uvicorn syra_backend.main:app --host 127.0.0.1 --port 8001 --reload
 cd frontend/website && npm install && npm run dev
 ```
 
+Once those are up: **Core demo** http://127.0.0.1:5174/demo · **Eval** http://127.0.0.1:5174/eval · **API** http://127.0.0.1:8001/docs
+
 Full steps: **[SETUP.md](SETUP.md)**. Auth: `Authorization: Bearer internal`.  
-Prefer localhost if a public deploy 502s. If you cannot run SETUP, use the video
-+ the n=30 table above as the verifiable artifacts.
+Prefer localhost if a public deploy 502s.
 
 ---
 
