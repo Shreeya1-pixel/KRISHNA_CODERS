@@ -10,6 +10,7 @@ import WorkflowBuilder from "./workflow/WorkflowBuilder";
 import Chatbot from "./pages/Chatbot";
 import VisualDemo from "./pages/VisualDemo";
 import CodeSwitchDemo from "./pages/CodeSwitchDemo";
+import DemoERP from "./pages/DemoERP";
 import { fetchBackendHealth } from "./api";
 import { applyGlareMode, getGlareMode } from "./components/GlareToggle";
 import "./styles/safeo.css";
@@ -27,6 +28,8 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Landing />} />
+          {/* Full-bleed Demo ERP (testing environment) — no SyRA chrome */}
+          <Route path="/erp-demo" element={<DemoERP />} />
           <Route
             path="/*"
             element={

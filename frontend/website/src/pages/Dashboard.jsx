@@ -1,11 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { fetchFullStats, fetchOdooHealth } from "../api";
-import {
-  countReachableConnections,
-  loadConnections,
-  seedOdooIfReachable,
-} from "../utils/connections";
+import { fetchBackendHealth, fetchFullStats } from "../api";
+import { countReachableConnections, loadConnections, markErpConnected } from "../utils/connections";
 
 function StatCard({ label, value, accent }) {
   return (
@@ -18,24 +14,28 @@ function StatCard({ label, value, accent }) {
 
 export default function Dashboard() {
   const [stats, setStats] = useState(null);
-  const [odooUp, setOdooUp] = useState(false);
+  const [syraUp, setSyraUp] = useState(false);
   const [connectedCount, setConnectedCount] = useState(0);
 
   useEffect(() => {
     const refresh = async () => {
+      let up = false;
       try {
-        const [full, odoo] = await Promise.all([fetchFullStats(), fetchOdooHealth()]);
+        await fetchBackendHealth();
+        up = true;
+        setSyraUp(true);
+        markErpConnected("demo_erp", { url: "/erp-demo" });
+      } catch {
+        setSyraUp(false);
+      }
+      try {
+        const full = await fetchFullStats();
         setStats(full);
-        setOdooUp(odoo);
-        const conns = seedOdooIfReachable(odoo);
-        setConnectedCount(countReachableConnections(odoo, conns));
       } catch {
         setStats(null);
-        const odoo = await fetchOdooHealth();
-        setOdooUp(odoo);
-        const conns = seedOdooIfReachable(odoo);
-        setConnectedCount(countReachableConnections(odoo, conns));
       }
+      const conns = loadConnections();
+      setConnectedCount(countReachableConnections(up, conns));
     };
     refresh();
     const t = setInterval(refresh, 8000);
@@ -48,7 +48,10 @@ export default function Dashboard() {
     <div className="safeo-page">
       <div className="safeo-page-header">
         <h2>Business Risk Dashboard</h2>
-        <p>Real-time business risk decisions — standalone view. Connect Odoo for full ERP integration.</p>
+        <p>
+          Real-time business risk decisions. Use{" "}
+          <Link to="/erp-demo">Demo ERP</Link> for the live testing environment.
+        </p>
       </div>
 
       <div className="safeo-stat-grid">
@@ -61,7 +64,8 @@ export default function Dashboard() {
 
       <Link to="/connect" className="safeo-erp-banner">
         <span>
-          SyRA is connected to <strong>{connectedCount}</strong> ERP system{connectedCount === 1 ? "" : "s"}
+          SyRA is connected to <strong>{connectedCount}</strong> ERP system
+          {connectedCount === 1 ? "" : "s"}
         </span>
         <span className="safeo-erp-banner-cta">Manage Connections →</span>
       </Link>
@@ -69,7 +73,10 @@ export default function Dashboard() {
       <div className="safeo-card">
         <h3>Recent Decisions</h3>
         {!stats?.recent_decisions?.length ? (
-          <p className="safeo-muted">No decisions yet. Run a scan from /demo or connect Odoo.</p>
+          <p className="safeo-muted">
+            No decisions yet. Run a scan from /demo or open{" "}
+            <Link to="/erp-demo">Demo ERP</Link>.
+          </p>
         ) : (
           <table className="safeo-table">
             <thead>
@@ -87,7 +94,9 @@ export default function Dashboard() {
                   <td>{row.source_system || "—"}</td>
                   <td>{Math.round((row.risk_score || 0) * 100)}%</td>
                   <td>
-                    <span className={`decision-badge ${decisionClass(row.decision)}`}>{row.decision}</span>
+                    <span className={`decision-badge ${decisionClass(row.decision)}`}>
+                      {row.decision}
+                    </span>
                   </td>
                 </tr>
               ))}
@@ -98,8 +107,8 @@ export default function Dashboard() {
 
       <div className="safeo-dashboard-footer">
         <div className="safeo-status-strip">
-          <span>Backend API: {stats ? "Connected" : "Checking…"}</span>
-          <span>Odoo: {odooUp ? "Connected" : "Not running"}</span>
+          <span>SyRA API: {syraUp ? "Connected" : "Offline"}</span>
+          <span>Demo ERP: {syraUp ? "Ready" : "Needs SyRA"}</span>
         </div>
       </div>
     </div>
@@ -110,16 +119,16 @@ function formatTime(ts) {
   if (!ts) return "—";
   try {
     const d = new Date(ts);
-    if (Number.isNaN(d.getTime())) return ts;
-    return d.toLocaleString(undefined, { month: "short", day: "2-digit", hour: "2-digit", minute: "2-digit" });
+    if (Number.isNaN(d.getTime())) return "—";
+    return d.toLocaleTimeString();
   } catch {
-    return ts;
+    return "—";
   }
 }
 
 function decisionClass(d) {
-  const v = String(d || "").toLowerCase();
-  if (v === "block") return "block";
-  if (v === "warn") return "warn";
+  const x = (d || "").toLowerCase();
+  if (x === "block") return "block";
+  if (x === "warn") return "warn";
   return "allow";
 }

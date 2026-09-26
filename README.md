@@ -26,10 +26,9 @@ call `POST /v1/scan` can be protected:
 | WhatsApp / Telegram bots | Message pre-processing |
 | Web forms | Backend validation layer |
 
-**For this demo we connected SyRA to Odoo** — the ERP module lives in
-`frontend/odoo_module/`. Odoo intercepts form submissions and asks SyRA before
-writing to the database. That is a **demo host**, not the product boundary.
-Point the same API at SAP, Oracle, or your own stack with one API key.
+**For this demo we built Demo ERP** — an in-app testing ERP at `/erp-demo` that
+calls SyRA before any “save”. No third-party ERP install. Point the same API at
+SAP, Oracle, or your own stack with one API key.
 
 ---
 
@@ -74,7 +73,7 @@ Point the same API at SAP, Oracle, or your own stack with one API key.
 | Adaptation | **Bayesian** Beta thresholds (SQLite) + **LoRA** fine-tune controller |
 | Optional LLM | Any OpenAI-compatible endpoint (vLLM / cloud) — **not required** |
 | Frontend | React + Vite |
-| ERP demo host | **Odoo** module (`frontend/odoo_module/`) |
+| ERP demo host | **Demo ERP** in-app testing UI (`/erp-demo`) |
 
 ### No OpenAI keys required
 
@@ -98,7 +97,7 @@ Set `SAFEO_API_KEYS=internal` and scan. Optional LLM is an upgrade, not a depend
 | Jira escalation from Logs | ✅ when env vars set |
 | Workflow Builder UI | ✅ local persistence |
 | Visual evidence (Playwright) | ✅ when Chromium deps installed |
-| Odoo module as ERP demo host | ✅ when Odoo is running |
+| Demo ERP testing environment | ✅ at `/erp-demo` when SyRA API is up |
 
 ### Partial / needs config
 
@@ -107,7 +106,7 @@ Set `SAFEO_API_KEYS=internal` and scan. Optional LLM is an upgrade, not a depend
 | Optional agent LLM | Needs an OpenAI-compatible URL + key; otherwise deterministic agents |
 | Tier-2 DistilBERT | Needs Torch + weights; TF-IDF fallback otherwise |
 | LoRA training run | Controller present; needs a GPU host to actually train |
-| Live Odoo inject | Needs Odoo + module installed |
+| Production ERP inject | Wire any ERP to `POST /v1/scan` |
 | Public free-tier deploy | May sleep / 502 — **prefer localhost for judging** |
 
 ### Not claimed
@@ -167,9 +166,10 @@ npm run dev
 Open **http://127.0.0.1:5174/demo**  
 (Vite proxies `/api` → `http://127.0.0.1:8001` — **both must be running**.)
 
-### 4. Odoo demo host (optional)
+### 4. Demo ERP (testing environment)
 
-See `QUICKSTART.md` and `frontend/odoo_module/`. Start Odoo with the SyRA module, then use **Connect → Open SyRA in Odoo**.
+With backend + frontend running, open **http://127.0.0.1:5174/erp-demo**
+or **Connect → Open Demo ERP**. Accounting / CRM / HR forms call SyRA before save.
 
 ---
 
@@ -186,7 +186,7 @@ backend/
     routes/
 frontend/
   website/            # SyRA React UI (/demo, Glare, chat, visual, workflow)
-  odoo_module/        # Odoo ERP demo integration
+  # Demo ERP lives in website at /erp-demo (no external ERP)
 docs/
 .env.example
 ```
@@ -238,4 +238,4 @@ Auth: `Authorization: Bearer internal` (or any key in `SAFEO_API_KEYS`).
 
 ## One-line pitch
 
-SyRA blocks malicious enterprise input when language is messy, actors are swarming, and the human logging the decision is standing in the sun — and it plugs into **any ERP**; this demo uses **Odoo**.
+SyRA blocks malicious enterprise input when language is messy, actors are swarming, and the human logging the decision is standing in the sun — and it plugs into **any ERP**; this build ships **Demo ERP** for testing.

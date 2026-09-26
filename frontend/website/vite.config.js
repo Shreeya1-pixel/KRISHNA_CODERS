@@ -15,11 +15,6 @@ export default defineConfig({
         target: "http://127.0.0.1:8001",
         changeOrigin: true,
       },
-      "/odoo-health": {
-        target: "http://127.0.0.1:8069",
-        changeOrigin: true,
-        rewrite: () => "/web/health",
-      },
     },
   },
 });

@@ -37,6 +37,7 @@ export default function Layout({ children }) {
         </Link>
         <nav className="safeo-nav">
           {navLink("/demo", "Code-Switch")}
+          {navLink("/erp-demo", "Demo ERP")}
           {navLink("/app", "Dashboard")}
           {navLink("/connect", "Connect ERP")}
           {navLink("/logs", "Logs")}

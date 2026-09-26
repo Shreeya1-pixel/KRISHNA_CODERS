@@ -1,29 +1,15 @@
 /*
- * DEMO FLOW:
- * 1. Open http://localhost:5174 — standalone SyRA dashboard
- * 2. Click "Connect to Your ERP →" in nav or banner on dashboard
- * 3. /connect page loads — Odoo card shows green "Connected" badge
- *    with today's scan count and last blocked timestamp
- * 4. Click "Open SyRA in Odoo →"
- * 5. New tab opens at http://127.0.0.1:8069/odoo/safeo
- * 6. Judges see the same SyRA UI now running inside a real ERP
+ * Connect Demo ERP → opens in-app testing ERP at /erp-demo (SyRA-gated forms).
+ * No third-party ERP install required.
  */
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Drawer from "../components/Drawer";
-import Modal from "../components/Modal";
 import { useToast } from "../components/Toast";
-import { fetchFullStats, fetchOdooHealth, odooMetricsFromStats, testEndpoint } from "../api";
-import { getApiKey, markErpConnected, seedOdooIfReachable } from "../utils/connections";
+import { fetchBackendHealth, fetchFullStats, testEndpoint } from "../api";
+import { getApiKey, markErpConnected, loadConnections } from "../utils/connections";
 
-const ODOO_SAFEO_URL = "http://127.0.0.1:8069/odoo/safeo";
 const BACKEND_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8001";
-
-const ODOO_SETUP = `cd /path/to/odoo
-./venv/bin/python odoo-bin -c odoo.conf --http-port=8069
-
-Install module: SyRA — ERP Risk Decision Engine (securec_odoo)
-Set Settings → SyRA → API URL to ${BACKEND_URL}`;
 
 function ErpCard({ icon, name, status, statusClass, children, primary, secondary }) {
   return (
@@ -46,24 +32,38 @@ function ErpCard({ icon, name, status, statusClass, children, primary, secondary
 
 export default function Connect() {
   const { showToast } = useToast();
-  const [odooUp, setOdooUp] = useState(false);
-  const [odooMetrics, setOdooMetrics] = useState({ lastScan: null, blockedToday: 0 });
+  const navigate = useNavigate();
+  const [syraUp, setSyraUp] = useState(false);
+  const [demoMetrics, setDemoMetrics] = useState({ lastScan: null, blockedToday: 0 });
   const [drawer, setDrawer] = useState(null);
-  const [setupOpen, setSetupOpen] = useState(false);
   const [testUrl, setTestUrl] = useState("");
   const [testResult, setTestResult] = useState(null);
   const apiKey = getApiKey();
 
   useEffect(() => {
     const poll = async () => {
-      const up = await fetchOdooHealth();
-      setOdooUp(up);
-      seedOdooIfReachable(up);
+      try {
+        await fetchBackendHealth();
+        setSyraUp(true);
+        markErpConnected("demo_erp", { url: "/erp-demo", status: "connected" });
+      } catch {
+        setSyraUp(false);
+      }
       try {
         const stats = await fetchFullStats();
-        setOdooMetrics(odooMetricsFromStats(stats));
+        const rows = (stats?.recent_decisions || []).filter((r) => {
+          const s = (r.source_system || "").toLowerCase();
+          return s === "demo_erp" || s.includes("demo");
+        });
+        const today = new Date().toISOString().slice(0, 10);
+        setDemoMetrics({
+          lastScan: rows[0]?.time || null,
+          blockedToday: rows.filter(
+            (r) => r.decision === "BLOCK" && String(r.time || "").startsWith(today)
+          ).length,
+        });
       } catch {
-        /* metrics optional */
+        /* optional */
       }
     };
     poll();
@@ -71,9 +71,9 @@ export default function Connect() {
     return () => clearInterval(t);
   }, []);
 
-  const openOdoo = () => {
-    showToast("Opening SyRA in Odoo...");
-    window.open(ODOO_SAFEO_URL, "_blank", "noopener,noreferrer");
+  const openDemoErp = () => {
+    showToast("Opening Demo ERP (SyRA-gated)…");
+    navigate("/erp-demo");
   };
 
   const closeDrawer = () => {
@@ -102,43 +102,36 @@ export default function Connect() {
       <div className="safeo-page-header">
         <h2>Connect to Your ERP System</h2>
         <p>
-          SyRA works as a security layer in front of any ERP. Select a connected system to open it,
-          or add a new integration.
+          SyRA works as a security layer in front of any ERP. Use <strong>Demo ERP</strong> for
+          live demos and testing — no external ERP install required.
         </p>
       </div>
 
       <div className="safeo-erp-grid">
         <ErpCard
-          icon="Od"
-          name="Odoo"
-          status={odooUp ? "● Connected" : "○ Not running"}
-          statusClass={odooUp ? "connected" : "idle"}
+          icon="DE"
+          name="Demo ERP"
+          status={syraUp ? "● Connected to SyRA" : "○ SyRA offline"}
+          statusClass={syraUp ? "connected" : "idle"}
           primary={
-            odooUp ? (
-              <button type="button" className="sim-run-btn" onClick={openOdoo}>
-                Open SyRA in Odoo →
-              </button>
-            ) : (
-              <button type="button" className="sim-run-btn" onClick={() => setSetupOpen(true)}>
-                Setup instructions
-              </button>
-            )
+            <button type="button" className="sim-run-btn" onClick={openDemoErp} disabled={!syraUp}>
+              Open Demo ERP →
+            </button>
           }
           secondary={
-            odooUp ? (
-              <Link to="/logs?source=odoo" className="safeo-btn-muted">
-                View Odoo logs
-              </Link>
-            ) : null
+            <Link to="/logs?source=demo_erp" className="safeo-btn-muted">
+              View Demo ERP logs
+            </Link>
           }
         >
-          {odooUp ? (
+          {syraUp ? (
             <>
-              <p>Last scan: {formatTime(odooMetrics.lastScan)}</p>
-              <p>Blocked today: {odooMetrics.blockedToday}</p>
+              <p>Last scan: {formatTime(demoMetrics.lastScan)}</p>
+              <p>Blocked today: {demoMetrics.blockedToday}</p>
+              <p className="safeo-muted">In-app testing ERP · Accounting / CRM / HR forms</p>
             </>
           ) : (
-            <p className="safeo-muted">Start Odoo to connect</p>
+            <p className="safeo-muted">Start SyRA API on port 8001 to enable Demo ERP</p>
           )}
         </ErpCard>
 
@@ -198,12 +191,6 @@ export default function Connect() {
           <p className="safeo-muted">Forward payloads to SyRA from any HTTP client</p>
         </ErpCard>
       </div>
-
-      <Modal open={setupOpen} title="Start Odoo" onClose={() => setSetupOpen(false)}>
-        <p className="safeo-muted">Run these commands from your Odoo install directory:</p>
-        <pre className="safeo-code">{ODOO_SETUP}</pre>
-        <p className="safeo-muted">Then open <a href={ODOO_SAFEO_URL} target="_blank" rel="noreferrer">{ODOO_SAFEO_URL}</a></p>
-      </Modal>
 
       <Drawer open={drawer === "sap"} title="Connect SAP to SyRA" onClose={closeDrawer}>
         <p><strong>Step 1:</strong> Copy your API key</p>

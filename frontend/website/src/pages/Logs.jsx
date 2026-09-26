@@ -16,7 +16,9 @@ export default function Logs() {
         if (source) {
           list = list.filter((r) => {
             const s = (r.source_system || "").toLowerCase();
-            if (source === "odoo") return s === "odoo" || s.includes("odoo");
+            if (source === "odoo" || source === "demo_erp") {
+              return s === "demo_erp" || s.includes("demo") || s === "odoo";
+            }
             return s === source || s.includes(source);
           });
         }

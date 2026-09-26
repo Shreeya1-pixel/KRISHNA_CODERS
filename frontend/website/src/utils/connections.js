@@ -1,9 +1,9 @@
-const STORAGE_KEY = "safeo_connections";
-const SETTINGS_KEY = "safeo_settings";
+const STORAGE_KEY = "syra_connections";
+const SETTINGS_KEY = "syra_settings";
 
 const DEFAULT_CONNECTIONS = {
-  odoo: {
-    url: "http://127.0.0.1:8069",
+  demo_erp: {
+    url: "/erp-demo",
     connected_at: null,
     status: "connected",
   },
@@ -32,21 +32,6 @@ export function saveConnections(connections) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(connections));
 }
 
-export function seedOdooIfReachable(odooReachable) {
-  const conns = loadConnections();
-  if (odooReachable) {
-    if (!conns.odoo?.connected_at) {
-      conns.odoo = {
-        url: "http://127.0.0.1:8069",
-        connected_at: new Date().toISOString(),
-        status: "connected",
-      };
-      saveConnections(conns);
-    }
-  }
-  return conns;
-}
-
 export function markErpConnected(id, meta = {}) {
   const conns = loadConnections();
   conns[id] = {
@@ -59,11 +44,11 @@ export function markErpConnected(id, meta = {}) {
   return conns;
 }
 
-export function countReachableConnections(odooReachable, connections) {
+export function countReachableConnections(syraReachable, connections) {
   let n = 0;
-  if (odooReachable) n += 1;
+  if (syraReachable) n += 1; // Demo ERP is online whenever SyRA is
   for (const [key, val] of Object.entries(connections || {})) {
-    if (key === "odoo") continue;
+    if (key === "demo_erp" || key === "odoo") continue;
     if (val?.status === "connected") n += 1;
   }
   return n;

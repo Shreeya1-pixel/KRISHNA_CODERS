@@ -46,7 +46,7 @@ Or: `backend/scripts/run_all.sh`
 
 ---
 
-## Section 4 — Start Odoo
+## Section 4 — Open Demo ERP
 
 `addons_path` must include **`frontend/odoo_module`** (see `odoo.conf.example`).
 
@@ -101,7 +101,7 @@ Expected: `"decision": "BLOCK"`, non-empty `scan_id`
 
 | Symptom | Fix |
 |---------|-----|
-| Odoo offline | Start Odoo on 8069 |
+| Demo ERP needs SyRA API | Open Demo ERP on 8069 |
 | `401` on `/v1/*` | `Authorization: Bearer internal` |
 | Agent logs missing | Check `/ws/investigation/{scan_id}` and investigation detail endpoint |
 | Dashboard offline | API URL in Odoo Settings |

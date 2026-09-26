@@ -10,15 +10,6 @@ export async function fetchBackendHealth() {
   return res.json();
 }
 
-export async function fetchOdooHealth() {
-  try {
-    const res = await fetch("/odoo-health", { signal: AbortSignal.timeout(4000) });
-    return res.ok;
-  } catch {
-    return false;
-  }
-}
-
 export async function fetchFullStats() {
   const res = await fetch(`${API}/ml/full-stats`);
   if (!res.ok) throw new Error("Metrics unavailable");
@@ -68,26 +59,6 @@ export async function fetchCodeSwitchDemo() {
   });
   if (!res.ok) throw new Error("Demo corpus unavailable");
   return res.json();
-}
-
-export function odooMetricsFromStats(stats) {
-  const rows = stats?.recent_decisions || [];
-  const odooRows = rows.filter((r) => {
-    const src = (r.source_system || "").toLowerCase();
-    return src === "odoo" || src.includes("odoo");
-  });
-
-  const today = new Date().toISOString().slice(0, 10);
-  const blockedToday = odooRows.filter(
-    (r) => r.decision === "BLOCK" && String(r.time || "").startsWith(today)
-  ).length;
-
-  const last = odooRows[0];
-  return {
-    lastScan: last?.time || null,
-    blockedToday,
-    totalOdoo: odooRows.length,
-  };
 }
 
 export async function testEndpoint(url) {

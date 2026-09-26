@@ -377,7 +377,7 @@ export default function Landing() {
           </div>
           <div className="land-stack-card reveal">
             <h3>Any ERP via REST</h3>
-            <p>Demo host is Odoo — same API for SAP, Oracle, or custom tools</p>
+            <p>Demo host is Demo ERP — same API for SAP, Oracle, or custom tools</p>
           </div>
         </div>
       </section>
@@ -396,7 +396,7 @@ export default function Landing() {
         <a href="https://safeo-shield-1.onrender.com" target="_blank" rel="noopener noreferrer">
           Live deployment
         </a>
-        <span>Any ERP · Odoo demo host</span>
+        <span>Any ERP · Demo ERP testing host</span>
       </footer>
     </div>
   );
