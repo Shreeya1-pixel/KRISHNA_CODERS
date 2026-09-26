@@ -19,11 +19,15 @@ Existing WAF/DLP tools assume clean, monolingual, desktop input; SyRA is the lay
 enterprise input that doesn't meet those assumptions — Gulf/MENA enterprise text,
 agentic traffic, and field-deployed staff.
 
-**Market:** Enterprise input-security tooling is a multi-billion-dollar category (WAF, DLP,
-CASB), but it's built for anglophone, desktop-first enterprises. Gulf/MENA enterprises —
-code-switching staff, agentic API traffic, field-deployed compliance teams — are
-underserved by that assumption. SyRA targets that gap as an API layer any ERP stack can
-adopt without a rip-and-replace.
+**Market:** Global WAF is commonly estimated ~USD 6–9B (2024–25); DLP and CASB each add
+low-single-billions — together a **low-tens-of-billions** category, still built for
+anglophone, desktop-first stacks. Gulf/MENA enterprises (code-switching staff, agentic
+API traffic, field compliance) are underserved; SyRA is an API layer any ERP can adopt
+without rip-and-replace. The form plane is already live attack surface: SuiteCRM SQLi
+in CRM modules (e.g. [CVE-2023-5350](https://nvd.nist.gov/vuln/detail/CVE-2023-5350)) and
+Salesforce Web-to-Lead → Agentforce prompt injection ([Zenity / The Register, 2026](https://www.theregister.com/security/2026/09/24/salesforce-agentforce-vulns-allowed-0-click-crm-data-theft-anonymous-phishing/5298958)).
+
+<small>Sources (approx.): WAF ~$5.8B (2024, [Expert Market Research](https://www.researchandmarkets.com/reports/6112911/web-application-firewall-market-report-forecast)) / ~$8.6–9.4B (2025, [Fortune](https://www.fortunebusinessinsights.com/web-application-firewall-market-108841), [Mordor](https://www.mordorintelligence.com/industry-reports/web-application-firewall-market)); DLP ~$4.3B (2024, [Stratview](https://www.stratviewresearch.com/market-reports/data-loss-prevention-market.html)); CASB ~$4.9B (2024, [Grand View](https://www.grandviewresearch.com/horizon/statistics/cloud-security-market/solution/casb/global)). Figures vary by firm — cite the range, not a single invented TAM.</small>
 
 **Three answers, upfront:**
 
