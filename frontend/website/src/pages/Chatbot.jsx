@@ -24,7 +24,7 @@ export default function Chatbot() {
     {
       id: "welcome",
       role: "assistant",
-      text: "Paste anything you want SafeO to scan. I'll show the same forensic result tailored to your role.",
+      text: "Paste anything you want SyRA to scan. I'll show the same forensic result tailored to your role.",
     },
   ]);
   const [loading, setLoading] = useState(false);
@@ -62,7 +62,7 @@ export default function Chatbot() {
     } catch (err) {
       appendMessage({
         role: "assistant",
-        text: `Scan failed: ${err.message}. Is the SafeO engine running on port 8001?`,
+        text: `Scan failed: ${err.message}. Is the SyRA engine running on port 8001?`,
       });
     } finally {
       setLoading(false);
@@ -94,7 +94,7 @@ export default function Chatbot() {
     <div className="cb-page">
       <div className="cb-page-header">
         <div>
-          <h2>SafeO Assistant</h2>
+          <h2>SyRA Assistant</h2>
           <p>Same forensic engine for everyone — depth adapts to who's asking. Not a generic chatbot.</p>
         </div>
         <div className="cb-role-select">
@@ -110,7 +110,7 @@ export default function Chatbot() {
 
       <div className="cb-demo-banner">
         <div>
-          <strong>Demo: ChatGPT vs SafeO on IDN homograph phishing</strong>
+          <strong>Demo: ChatGPT vs SyRA on IDN homograph phishing</strong>
           <p>Arabic-script look-alike URL that generic LLMs often call "valid"</p>
         </div>
         <button type="button" className="cb-demo-btn" onClick={runHomographDemo} disabled={loading}>
@@ -131,7 +131,7 @@ export default function Chatbot() {
             </ul>
           </div>
           <div className="cb-compare-panel safeo">
-            <div className="cb-compare-title">{safeoDemo?.title || "SafeO"}</div>
+            <div className="cb-compare-title">{safeoDemo?.title || "SyRA"}</div>
             <div className="cb-compare-sub">{safeoDemo?.subtitle || "Live scan result"}</div>
             {safeoDemo ? (
               <>
@@ -154,7 +154,7 @@ export default function Chatbot() {
                 <code className="cb-hash">{safeoDemo.audit_hash}</code>
               </>
             ) : (
-              <p className="cb-muted">Run the demo to populate SafeO side…</p>
+              <p className="cb-muted">Run the demo to populate SyRA side…</p>
             )}
           </div>
         </div>

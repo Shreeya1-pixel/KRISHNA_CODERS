@@ -29,10 +29,10 @@ export default function Layout({ children }) {
     <div className="safeo-app">
       <header className="safeo-header">
         <Link to="/" className="safeo-brand" style={{ textDecoration: "none", color: "inherit" }}>
-          <div className="safeo-brand-mark">S</div>
+          <div className="safeo-brand-mark">Sy</div>
           <div className="safeo-brand-text">
-            <h1>SafeO</h1>
-            <span>ERP Protection Layer</span>
+            <h1>SyRA</h1>
+            <span>Security decision layer</span>
           </div>
         </Link>
         <nav className="safeo-nav">

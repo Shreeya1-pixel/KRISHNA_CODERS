@@ -1,10 +1,10 @@
-# SafeO
+# SyRA
 
 **Hero demo:** http://127.0.0.1:5174/demo  
 **API docs:** http://127.0.0.1:8001/docs  
 **Repo:** https://github.com/Shreeya1-pixel/KRISHNA_CODERS
 
-SafeO is a real-time **ALLOW / WARN / BLOCK** decision engine for enterprise inputs
+SyRA is a real-time **ALLOW / WARN / BLOCK** decision engine for enterprise inputs
 (ERP forms, APIs, chat). It is built so security still works when:
 
 1. **Language is messy** — code-switching, spelling by ear, script-borrowing (AI/ML)
@@ -15,7 +15,7 @@ SafeO is a real-time **ALLOW / WARN / BLOCK** decision engine for enterprise inp
 
 ## Works with any ERP (or any HTTP client)
 
-SafeO is **platform-agnostic**. It exposes a universal REST API — any system that can
+SyRA is **platform-agnostic**. It exposes a universal REST API — any system that can
 call `POST /v1/scan` can be protected:
 
 | Platform | Integration |
@@ -26,17 +26,16 @@ call `POST /v1/scan` can be protected:
 | WhatsApp / Telegram bots | Message pre-processing |
 | Web forms | Backend validation layer |
 
-**For this demo we connected SafeO to a demo ERP host** (module under
-`frontend/odoo_module/` — a sample ERP adapter). The demo ERP intercepts form
-submissions and asks SafeO before writing to the database. That is a **demo
-vehicle**, not the product boundary. Point the same API at SAP, Oracle, or your
-own stack with one API key.
+**For this demo we connected SyRA to Odoo** — the ERP module lives in
+`frontend/odoo_module/`. Odoo intercepts form submissions and asks SyRA before
+writing to the database. That is a **demo host**, not the product boundary.
+Point the same API at SAP, Oracle, or your own stack with one API key.
 
 ---
 
 ## Three themes (this submission)
 
-| # | Domain problem | What SafeO ships |
+| # | Domain problem | What SyRA ships |
 |---|---|---|
 | **01** | Code-switching & spelling by ear | **Hero:** `/demo` + `GET /v1/demo/code-switch` — MultilingualAgent normalises Arabizi / Arabic digits / mixed script **before** Tier-1 patterns |
 | **02** | Sybil resistance under agent swarms | **Swarm Guard** — burst detector (`SYBIL_SUSPECT`), stake-gated Bayesian feedback (`role=analyst`), `agent_id` in SHA-256 audit hash |
@@ -75,7 +74,7 @@ own stack with one API key.
 | Adaptation | **Bayesian** Beta thresholds (SQLite) + **LoRA** fine-tune controller |
 | Optional LLM | Any OpenAI-compatible endpoint (vLLM / cloud) — **not required** |
 | Frontend | React + Vite |
-| Demo ERP host | Sample ERP adapter (`frontend/odoo_module/`) |
+| ERP demo host | **Odoo** module (`frontend/odoo_module/`) |
 
 ### No OpenAI keys required
 
@@ -99,7 +98,7 @@ Set `SAFEO_API_KEYS=internal` and scan. Optional LLM is an upgrade, not a depend
 | Jira escalation from Logs | ✅ when env vars set |
 | Workflow Builder UI | ✅ local persistence |
 | Visual evidence (Playwright) | ✅ when Chromium deps installed |
-| Demo ERP module as host | ✅ when the demo ERP is running |
+| Odoo module as ERP demo host | ✅ when Odoo is running |
 
 ### Partial / needs config
 
@@ -108,7 +107,7 @@ Set `SAFEO_API_KEYS=internal` and scan. Optional LLM is an upgrade, not a depend
 | Optional agent LLM | Needs an OpenAI-compatible URL + key; otherwise deterministic agents |
 | Tier-2 DistilBERT | Needs Torch + weights; TF-IDF fallback otherwise |
 | LoRA training run | Controller present; needs a GPU host to actually train |
-| Live demo-ERP inject | Needs the demo ERP process + module installed |
+| Live Odoo inject | Needs Odoo + module installed |
 | Public free-tier deploy | May sleep / 502 — **prefer localhost for judging** |
 
 ### Not claimed
@@ -136,8 +135,6 @@ cd backend
 python3.11 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-# If full requirements are slow, minimum for hero demo:
-# pip install fastapi 'uvicorn[standard]' pydantic httpx python-dotenv aiohttp Pillow numpy scipy python-multipart requests
 
 cp ../.env.example .env
 # SAFEO_API_KEYS=internal
@@ -170,22 +167,26 @@ npm run dev
 Open **http://127.0.0.1:5174/demo**  
 (Vite proxies `/api` → `http://127.0.0.1:8001` — **both must be running**.)
 
+### 4. Odoo demo host (optional)
+
+See `QUICKSTART.md` and `frontend/odoo_module/`. Start Odoo with the SyRA module, then use **Connect → Open SyRA in Odoo**.
+
 ---
 
 ## Repository layout
 
 ```text
 backend/
-  safeo_backend/
-    agents/           # 5-agent graph, multilingual, forensics, …
+  safeo_backend/      # API package path (unchanged); product name is SyRA
+    agents/
     core/
-      ml/             # risk_scorer, bayesian, LoRA, securec_language
-      demo_corpus.py  # code-switch samples
+      ml/
+      demo_corpus.py
       sybil_detector.py
-    routes/           # /v1/scan, feedback, logs, visual, …
+    routes/
 frontend/
-  website/            # React UI (/demo, Glare, chat, visual, workflow)
-  odoo_module/        # Demo ERP adapter (any ERP can call the same API)
+  website/            # SyRA React UI (/demo, Glare, chat, visual, workflow)
+  odoo_module/        # Odoo ERP demo integration
 docs/
 .env.example
 ```
@@ -206,16 +207,12 @@ https://ọpen-ạccess…   → IDN / script-borrow → BLOCK
 
 ## Swarm Guard — Sybil resistance (Theme 02)
 
-**Name:** In security and Web3, a **Sybil attack** means one actor pretending to be
-many. That is exactly the hackathon problem (“acting as ten thousand costs almost
-nothing”). SafeO’s product name for the countermeasure is **Swarm Guard**; the
-flag in APIs/logs stays `SYBIL_SUSPECT` so judges recognise the standard term.
+**Name:** A **Sybil attack** means one actor pretending to be many. SyRA’s product
+name for the countermeasure is **Swarm Guard**; the API flag stays `SYBIL_SUSPECT`.
 
 - Same payload from ≥5 distinct `user_id`s in 30s → `sybil_suspect: true`
 - Anonymous feedback is quarantined; `role=analyst` updates Bayesian priors
 - `audit_hash` includes `agent_id`
-
-This is Sybil resistance for the **security decision plane**, not a crypto wallet.
 
 ---
 
@@ -241,4 +238,4 @@ Auth: `Authorization: Bearer internal` (or any key in `SAFEO_API_KEYS`).
 
 ## One-line pitch
 
-SafeO blocks malicious enterprise input when language is messy, actors are swarming, and the human logging the decision is standing in the sun — and it plugs into **any ERP**; this build ships a **demo ERP** adapter as the sample host.
+SyRA blocks malicious enterprise input when language is messy, actors are swarming, and the human logging the decision is standing in the sun — and it plugs into **any ERP**; this demo uses **Odoo**.

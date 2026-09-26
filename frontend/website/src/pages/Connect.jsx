@@ -1,12 +1,12 @@
 /*
  * DEMO FLOW:
- * 1. Open http://localhost:5174 — standalone SafeO dashboard
+ * 1. Open http://localhost:5174 — standalone SyRA dashboard
  * 2. Click "Connect to Your ERP →" in nav or banner on dashboard
  * 3. /connect page loads — Odoo card shows green "Connected" badge
  *    with today's scan count and last blocked timestamp
- * 4. Click "Open SafeO in Odoo →"
+ * 4. Click "Open SyRA in Odoo →"
  * 5. New tab opens at http://127.0.0.1:8069/odoo/safeo
- * 6. Judges see the same SafeO UI now running inside a real ERP
+ * 6. Judges see the same SyRA UI now running inside a real ERP
  */
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -22,8 +22,8 @@ const BACKEND_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8001";
 const ODOO_SETUP = `cd /path/to/odoo
 ./venv/bin/python odoo-bin -c odoo.conf --http-port=8069
 
-Install module: SafeO — ERP Risk Decision Engine (securec_odoo)
-Set Settings → SafeO → API URL to ${BACKEND_URL}`;
+Install module: SyRA — ERP Risk Decision Engine (securec_odoo)
+Set Settings → SyRA → API URL to ${BACKEND_URL}`;
 
 function ErpCard({ icon, name, status, statusClass, children, primary, secondary }) {
   return (
@@ -72,7 +72,7 @@ export default function Connect() {
   }, []);
 
   const openOdoo = () => {
-    showToast("Opening SafeO in Demo ERP...");
+    showToast("Opening SyRA in Odoo...");
     window.open(ODOO_SAFEO_URL, "_blank", "noopener,noreferrer");
   };
 
@@ -102,21 +102,21 @@ export default function Connect() {
       <div className="safeo-page-header">
         <h2>Connect to Your ERP System</h2>
         <p>
-          SafeO works as a security layer in front of any ERP. Select a connected system to open it,
+          SyRA works as a security layer in front of any ERP. Select a connected system to open it,
           or add a new integration.
         </p>
       </div>
 
       <div className="safeo-erp-grid">
         <ErpCard
-          icon="ERP"
-          name="Demo ERP"
+          icon="Od"
+          name="Odoo"
           status={odooUp ? "● Connected" : "○ Not running"}
           statusClass={odooUp ? "connected" : "idle"}
           primary={
             odooUp ? (
               <button type="button" className="sim-run-btn" onClick={openOdoo}>
-                Open SafeO in Demo ERP →
+                Open SyRA in Odoo →
               </button>
             ) : (
               <button type="button" className="sim-run-btn" onClick={() => setSetupOpen(true)}>
@@ -127,7 +127,7 @@ export default function Connect() {
           secondary={
             odooUp ? (
               <Link to="/logs?source=odoo" className="safeo-btn-muted">
-                View demo ERP logs
+                View Odoo logs
               </Link>
             ) : null
           }
@@ -138,7 +138,7 @@ export default function Connect() {
               <p>Blocked today: {odooMetrics.blockedToday}</p>
             </>
           ) : (
-            <p className="safeo-muted">Start the demo ERP host to connect</p>
+            <p className="safeo-muted">Start Odoo to connect</p>
           )}
         </ErpCard>
 
@@ -153,7 +153,7 @@ export default function Connect() {
             </button>
           }
         >
-          <p className="safeo-muted">Enterprise SAP integration via SafeO REST API</p>
+          <p className="safeo-muted">Enterprise SAP integration via SyRA REST API</p>
         </ErpCard>
 
         <ErpCard
@@ -181,7 +181,7 @@ export default function Connect() {
             </button>
           }
         >
-          <p className="safeo-muted">Any system using the SafeO Python SDK</p>
+          <p className="safeo-muted">Any system using the SyRA Python SDK</p>
         </ErpCard>
 
         <ErpCard
@@ -195,17 +195,17 @@ export default function Connect() {
             </button>
           }
         >
-          <p className="safeo-muted">Forward payloads to SafeO from any HTTP client</p>
+          <p className="safeo-muted">Forward payloads to SyRA from any HTTP client</p>
         </ErpCard>
       </div>
 
-      <Modal open={setupOpen} title="Start Demo ERP" onClose={() => setSetupOpen(false)}>
-        <p className="safeo-muted">Run these commands from your demo ERP install directory:</p>
+      <Modal open={setupOpen} title="Start Odoo" onClose={() => setSetupOpen(false)}>
+        <p className="safeo-muted">Run these commands from your Odoo install directory:</p>
         <pre className="safeo-code">{ODOO_SETUP}</pre>
         <p className="safeo-muted">Then open <a href={ODOO_SAFEO_URL} target="_blank" rel="noreferrer">{ODOO_SAFEO_URL}</a></p>
       </Modal>
 
-      <Drawer open={drawer === "sap"} title="Connect SAP to SafeO" onClose={closeDrawer}>
+      <Drawer open={drawer === "sap"} title="Connect SAP to SyRA" onClose={closeDrawer}>
         <p><strong>Step 1:</strong> Copy your API key</p>
         <div className="safeo-key-row">
           <code>{apiKey}</code>
@@ -227,7 +227,7 @@ export default function Connect() {
         {testResult && <p className={testResult.ok ? "safeo-ok" : "safeo-err"}>{testResult.msg}</p>}
       </Drawer>
 
-      <Drawer open={drawer === "salesforce"} title="Connect Salesforce to SafeO" onClose={closeDrawer}>
+      <Drawer open={drawer === "salesforce"} title="Connect Salesforce to SyRA" onClose={closeDrawer}>
         <p><strong>Step 1:</strong> Copy your API key</p>
         <div className="safeo-key-row">
           <code>{apiKey}</code>
@@ -247,16 +247,16 @@ HttpResponse res = new Http().send(req);`}</pre>
         {testResult && <p className={testResult.ok ? "safeo-ok" : "safeo-err"}>{testResult.msg}</p>}
       </Drawer>
 
-      <Drawer open={drawer === "custom"} title="Connect Custom ERP to SafeO" onClose={closeDrawer}>
+      <Drawer open={drawer === "custom"} title="Connect Custom ERP to SyRA" onClose={closeDrawer}>
         <p><strong>Step 1:</strong> Copy your API key</p>
         <div className="safeo-key-row">
           <code>{apiKey}</code>
           <button type="button" className="safeo-refresh-btn" onClick={copyKey}>Copy</button>
         </div>
         <p><strong>Step 2:</strong> Python SDK</p>
-        <pre className="safeo-code">{`from safeo_sdk import SafeOClient
+        <pre className="safeo-code">{`from syra_sdk import SyRAClient
 
-client = SafeOClient(api_key="${apiKey}", base_url="${BACKEND_URL}")
+client = SyRAClient(api_key="${apiKey}", base_url="${BACKEND_URL}")
 result = client.scan("user input", source_system="custom_erp")
 print(result.decision, result.risk_score)`}</pre>
         <p><strong>Step 3:</strong> Test connection</p>

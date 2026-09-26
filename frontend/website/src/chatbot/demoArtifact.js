@@ -1,5 +1,5 @@
 /**
- * Prepared demo artifact — ChatGPT vs SafeO side-by-side (not live ChatGPT).
+ * Prepared demo artifact — ChatGPT vs SyRA side-by-side (not live ChatGPT).
  * Judges see why generic LLMs miss IDN homograph phishing.
  */
 export const HOMOGRAPH_DEMO_URL = "https://ọpen-ạccess.com/login";
@@ -22,7 +22,7 @@ export function buildSafeoDemoSummary(scan) {
   if (!scan) return null;
   const url = scan.url_analysis || {};
   return {
-    title: "SafeO",
+    title: "SyRA",
     subtitle: "Role-adaptive forensic engine — same analysis, analyst depth available",
     verdict: scan.decision === "BLOCK" ? "UNSAFE" : scan.decision === "WARN" ? "CAUTION" : "SAFE",
     verdictClass: scan.decision === "BLOCK" ? "unsafe" : scan.decision === "WARN" ? "warn" : "safe",

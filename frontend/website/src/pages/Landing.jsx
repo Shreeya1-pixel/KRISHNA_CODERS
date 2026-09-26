@@ -242,8 +242,8 @@ export default function Landing() {
       <canvas className="land-network" ref={canvasRef} aria-hidden="true" />
       <header className="land-nav">
         <div className="land-brand">
-          <div className="land-brand-mark">S</div>
-          <span>SafeO</span>
+          <div className="land-brand-mark">Sy</div>
+          <span>SyRA</span>
         </div>
         <nav className="land-nav-links">
           <a href="#themes">Themes</a>
@@ -259,12 +259,12 @@ export default function Landing() {
 
       <section className="land-hero">
         <div className="land-hero-glow" aria-hidden="true" />
-        <p className="reveal land-eyebrow">AMD Developer Hackathon · ACT II</p>
+        <p className="reveal land-eyebrow">Multi-agent · multilingual · field-ready</p>
         <h1 className="reveal">
           Stop malicious input <span className="land-accent">before</span> it becomes a breach.
         </h1>
         <p className="reveal land-sub">
-          SafeO is an Arabic-aware, multi-agent cybersecurity decision engine that scans ERP forms,
+          SyRA is an Arabic-aware, multi-agent cybersecurity decision engine that scans ERP forms,
           APIs, and messages in real time — then returns ALLOW, WARN, or BLOCK before the data is
           ever saved. Built for code-switching attackers, agent swarms, and field glare.
         </p>
@@ -289,7 +289,7 @@ export default function Landing() {
       </section>
 
       <section className="land-section" id="themes">
-        <h2 className="reveal">Three failure modes SafeO is built against</h2>
+        <h2 className="reveal">Three failure modes SyRA is built against</h2>
         <p className="reveal land-section-sub">
           One product. Three hackathon domains. Same ALLOW / WARN / BLOCK spine.
         </p>
@@ -322,7 +322,7 @@ export default function Landing() {
       </section>
 
       <section className="land-section" id="how">
-        <h2 className="reveal">The gap SafeO closes</h2>
+        <h2 className="reveal">The gap SyRA closes</h2>
         <p className="reveal land-section-sub">
           Perimeter tools and post-hoc logs miss attacks that happen inside the business workflow
           itself — inside the form, before anything is stored.
@@ -331,7 +331,7 @@ export default function Landing() {
           <div className="land-table-row land-table-head">
             <span>Existing approach</span>
             <span>Limitation</span>
-            <span>SafeO difference</span>
+            <span>SyRA difference</span>
           </div>
           {DIFFERENCES.map(([a, b, c]) => (
             <div className="land-table-row" key={a}>
@@ -361,24 +361,23 @@ export default function Landing() {
       </section>
 
       <section className="land-section land-stack" id="stack">
-        <h2 className="reveal">Built for AMD, runs without OpenAI</h2>
+        <h2 className="reveal">Runs without OpenAI keys</h2>
         <p className="reveal land-section-sub">
           Default path is fully local: deterministic heuristics, DistilBERT/TF-IDF, and
-          deterministic Python agents. Optional cloud path uses Fireworks AI on AMD-hosted
-          inference for faster agent reasoning.
+          deterministic Python agents. Optional cloud LLM is an upgrade — not required.
         </p>
         <div className="land-stack-grid">
           <div className="land-stack-card reveal">
-            <h3>AMD AI Developer Cloud</h3>
-            <p>ROCm-compatible inference and LoRA fine-tuning workflows</p>
+            <h3>3-tier local scoring</h3>
+            <p>Heuristics → classifier → optional LLM only when uncertain</p>
           </div>
           <div className="land-stack-card reveal">
-            <h3>bf16 LoRA</h3>
-            <p>Avoids fp16 instability on AMD ROCm during fine-tuning</p>
+            <h3>bf16 LoRA controller</h3>
+            <p>Self-improving Tier-2 path with deployment safety gates</p>
           </div>
           <div className="land-stack-card reveal">
-            <h3>Fireworks AI (optional)</h3>
-            <p>Fast agent reasoning on AMD-hosted models, no OpenAI key needed</p>
+            <h3>Any ERP via REST</h3>
+            <p>Demo host is Odoo — same API for SAP, Oracle, or custom tools</p>
           </div>
         </div>
       </section>
@@ -393,11 +392,11 @@ export default function Landing() {
       </section>
 
       <footer className="land-footer">
-        <span>SafeO — ERP Protection Layer</span>
+        <span>SyRA — ERP Protection Layer</span>
         <a href="https://safeo-shield-1.onrender.com" target="_blank" rel="noopener noreferrer">
           Live deployment
         </a>
-        <span>AMD Developer Hackathon · ACT II</span>
+        <span>Any ERP · Odoo demo host</span>
       </footer>
     </div>
   );

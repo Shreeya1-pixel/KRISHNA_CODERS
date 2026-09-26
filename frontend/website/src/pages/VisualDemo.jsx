@@ -48,7 +48,7 @@ export default function VisualDemo() {
     <div className="vis-page">
       <div className="vis-header">
         <h2>Visual Evidence Capture</h2>
-        <p>Headless screenshot + annotated highlight regions from SafeO Tier 1 scan.</p>
+        <p>Headless screenshot + annotated highlight regions from SyRA Tier 1 scan.</p>
       </div>
 
       <div className="vis-controls">

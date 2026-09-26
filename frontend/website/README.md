@@ -1,6 +1,6 @@
-# SafeO Standalone Website
+# SyRA Standalone Website
 
-Standalone demo dashboard at **http://localhost:5174** — connects to the same FastAPI backend (port 8001) and Odoo SafeO (port 8069).
+Standalone demo dashboard at **http://localhost:5174** — connects to the same FastAPI backend (port 8001) and Odoo SyRA (port 8069).
 
 ## Quick start
 
@@ -17,7 +17,7 @@ Open http://localhost:5174
 1. Open the standalone dashboard
 2. Click **Connect to Your ERP →** (nav or banner)
 3. Odoo card shows **● Connected** when Odoo is running
-4. Click **Open SafeO in Odoo →** — opens http://127.0.0.1:8069/odoo/safeo in a new tab
+4. Click **Open SyRA in Odoo →** — opens http://127.0.0.1:8069/odoo/safeo in a new tab
 
 ## Prerequisites
 

@@ -149,7 +149,7 @@ export default function CodeSwitchDemo() {
         <h2>Code-switch &amp; spell-by-ear security demo</h2>
         <p>
           Language tools learn one clean official version of a language. People switch tongues mid-sentence,
-          spell by ear, and write one language in another&apos;s script. Click a sample — SafeO normalises,
+          spell by ear, and write one language in another&apos;s script. Click a sample — SyRA normalises,
           scores, and returns ALLOW / WARN / BLOCK.
         </p>
         {backendOk === false && (

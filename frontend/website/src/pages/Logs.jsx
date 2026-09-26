@@ -81,7 +81,7 @@ export default function Logs() {
         <p>
           {source
             ? `Showing decisions from source: ${source}`
-            : "All recent decisions from the SafeO engine"}
+            : "All recent decisions from the SyRA engine"}
         </p>
       </div>
       <div className="safeo-card">
