@@ -1,12 +1,14 @@
 /**
- * Prepared demo artifact — ChatGPT vs SyRA side-by-side (not live ChatGPT).
- * Judges see why generic LLMs miss IDN homograph phishing.
+ * Prepared foil — generic LLM-style reply vs live SyRA Tier-1+2 scan.
+ * Not a live ChatGPT call and not a "we beat ChatGPT" claim: ChatGPT is not a
+ * security product. The point is that generic LLMs need a purpose-built
+ * pre-processing / detection layer for confusable Unicode.
  */
 export const HOMOGRAPH_DEMO_URL = "https://ọpen-ạccess.com/login";
 
 export const CHATGPT_DEMO_RESPONSE = {
-  title: "ChatGPT",
-  subtitle: "Generic answer — same depth for every user",
+  title: "Generic LLM (prepared foil)",
+  subtitle: "Not a security product — often treats confusable Unicode as “normal” text",
   verdict: "Looks safe",
   verdictClass: "safe",
   body: [
@@ -15,15 +17,16 @@ export const CHATGPT_DEMO_RESPONSE = {
     "I don't see obvious malware indicators in the URL structure.",
     "Recommendation: proceed if you were expecting this link.",
   ],
-  footnote: "Prepared demo artifact — illustrates how LLMs normalize confusable Unicode visually.",
+  footnote:
+    "Prepared artifact only — illustrates why generic LLMs need a purpose-built pre-processing layer for IDN/homographs. Not a live ChatGPT call or a horse race.",
 };
 
 export function buildSyraDemoSummary(scan) {
   if (!scan) return null;
   const url = scan.url_analysis || {};
   return {
-    title: "SyRA",
-    subtitle: "Role-adaptive forensic engine — same analysis, analyst depth available",
+    title: "SyRA (Tier-1 + Tier-2)",
+    subtitle: "Live scan — purpose-built normalisation + detection (no Tier-3 LLM)",
     verdict: scan.decision === "BLOCK" ? "UNSAFE" : scan.decision === "WARN" ? "CAUTION" : "SAFE",
     verdictClass: scan.decision === "BLOCK" ? "unsafe" : scan.decision === "WARN" ? "warn" : "safe",
     risk_score: scan.risk_score,

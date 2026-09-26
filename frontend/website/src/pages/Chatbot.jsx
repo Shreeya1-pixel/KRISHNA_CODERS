@@ -95,7 +95,10 @@ export default function Chatbot() {
       <div className="cb-page-header">
         <div>
           <h2>SyRA Assistant</h2>
-          <p>Same forensic engine for everyone — depth adapts to who's asking. Not a generic chatbot.</p>
+          <p>
+            Same Tier-1+2 forensic engine for everyone — depth adapts to who&apos;s asking.
+            No OpenAI key; Tier-3 LLM is off unless you configure it.
+          </p>
         </div>
         <div className="cb-role-select">
           <label htmlFor="role">Your role</label>
@@ -110,8 +113,11 @@ export default function Chatbot() {
 
       <div className="cb-demo-banner">
         <div>
-          <strong>Demo: ChatGPT vs SyRA on IDN homograph phishing</strong>
-          <p>Arabic-script look-alike URL that generic LLMs often call "valid"</p>
+          <strong>Why generic LLMs need a purpose-built layer (IDN homograph)</strong>
+          <p>
+            Prepared foil vs live SyRA scan — not a ChatGPT horse race. ChatGPT isn&apos;t a
+            security product; this shows the pre-processing gap on confusable Unicode.
+          </p>
         </div>
         <button type="button" className="cb-demo-btn" onClick={runHomographDemo} disabled={loading}>
           Run homograph demo
@@ -129,6 +135,7 @@ export default function Chatbot() {
             <ul>
               {CHATGPT_DEMO_RESPONSE.body.map((line, i) => <li key={i}>{line}</li>)}
             </ul>
+            <p className="cb-muted">{CHATGPT_DEMO_RESPONSE.footnote}</p>
           </div>
           <div className="cb-compare-panel syra">
             <div className="cb-compare-title">{syraDemo?.title || "SyRA"}</div>
@@ -169,7 +176,7 @@ export default function Chatbot() {
           ))}
           {loading && (
             <ChatMessage role="assistant">
-              <span className="cb-loading">Scanning with Tier 1 pipeline…</span>
+              <span className="cb-loading">Scanning with Tier-1 + Tier-2 (no LLM key)…</span>
             </ChatMessage>
           )}
         </div>

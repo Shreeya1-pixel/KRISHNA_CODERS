@@ -32,7 +32,8 @@ persistence** as an API any ERP or chat client can call.
 <small>Sources (approx.): WAF ~$5.8B (2024, [EMR](https://www.researchandmarkets.com/reports/6112911/web-application-firewall-market-report-forecast)) / ~$8.6–9.4B (2025, [Fortune](https://www.fortunebusinessinsights.com/web-application-firewall-market-108841), [Mordor](https://www.mordorintelligence.com/industry-reports/web-application-firewall-market)); DLP ~$4.3B (2024, [Stratview](https://www.stratviewresearch.com/market-reports/data-loss-prevention-market.html)); CASB ~$4.9B (2024, [Grand View](https://www.grandviewresearch.com/horizon/statistics/cloud-security-market/solution/casb/global)). Cite the range, not a single invented TAM.</small>
 
 **Look at first:** `/demo` (normalisation) → `/eval` (precision/recall/FPR, misses kept) →
-`/visual` (GitHub or URL → annotated screenshot) → `/chat` (role-adaptive assistant).
+`/visual` (GitHub or URL → annotated screenshot) → `/chat` (role-adaptive views).  
+Default live path is **Tier-1 + Tier-2 only** — no API key, no Tier-3 LLM.
 
 ---
 
@@ -42,15 +43,22 @@ persistence** as an API any ERP or chat client can call.
 |---|---|
 | `/demo` | **Hero** — one-click code-switch / Arabizi / Arabic-digit payloads → ALLOW/WARN/BLOCK + normalised text + tier path |
 | `/eval` | **Live eval harness** — labeled n=30 set, precision / recall / FPR, kept misses |
-| `/chat` | **Role-adaptive chatbot** — same engine, different depth (non-technical / analyst / ERP manager / developer); includes homograph vs ChatGPT comparison demo |
-| `/visual` | **Visual evidence** — paste a **URL** or **GitHub repo**; Playwright + Pillow return annotated screenshots highlighting where the risk is |
-| `/workflow` | **Workflow builder** — drag-and-drop scan pipelines (input → detect → decide), save/run via `/workflows` |
-| `/erp-demo` | Demo ERP forms gated by SyRA before “save” |
-| `/erp-sap-stub` | Second HTTP ERP shape (SAP Event Mesh–style webhook) |
+| `/chat` | **Role-adaptive chat UI** — same Tier-1+2 engine, depth by role; optional homograph panel (see framing below) |
+| `/visual` | **Visual evidence** — paste a **URL** or **GitHub repo**; Playwright + Pillow return annotated screenshots |
+| `/erp-demo` · `/erp-sap-stub` | ERP harnesses gated by the same scan API |
 | `/app` | Dashboard + live engine path (which tiers are up) |
+| `/workflow` | Pipeline builder for composing detection steps without editing models — product tooling, not the ML hero |
 
-Field Mode toggle (high-contrast) works across the UI; Swarm Guard tags burst traffic as
-`SYBIL_SUSPECT` — both are extras, not separate track claims.
+Field Mode and Swarm Guard remain available as extras (not separate track claims).
+
+**`/chat` homograph panel (not a ChatGPT horse race):** a *prepared* generic-LLM-style
+reply is shown beside a live SyRA Tier-1+2 scan of the same IDN URL. ChatGPT is not a
+security product and was not designed for confusable Unicode — the point is only that
+**generic LLMs need a purpose-built pre-processing / detection layer** for this class of
+input. It is not a claim that we “beat” ChatGPT.
+
+**`/workflow` one-liner (if asked how it serves AI/ML):** lets non-technical staff compose
+detection pipelines without touching the model layer; the models stay behind `/v1/scan`.
 
 ---
 
@@ -59,12 +67,12 @@ Field Mode toggle (high-contrast) works across the UI; Swarm Guard tags burst tr
 | Layer | Stack |
 |---|---|
 | API | FastAPI · Uvicorn · Pydantic |
-| Scoring | Heuristics → TF-IDF / DistilBERT → optional LLM |
+| Scoring | Heuristics → TF-IDF (live default) → optional DistilBERT / LLM |
 | Multilingual | Arabizi / Arabic-digit / mixed-script / homograph normalisation |
 | Agents | Local LangGraph-style graph (5 specialists) |
 | Visual | Playwright (Chromium) · Pillow annotations · GitHub file render |
-| Workflow | React canvas builder · `/workflows` validate/run API |
-| Chat | Role-conditioned result views over the same `/v1/scan` |
+| Chat UI | Role-conditioned views over `/v1/scan` (Tier-1+2; not Tier-3) |
+| Workflow | Optional pipeline composer — wraps the same scan API |
 | Audit | Per-scan SHA-256 `audit_hash` · investigation `prev_hash` chain |
 | Adaptation | Bayesian thresholds (SQLite) · LoRA controller |
 | Frontend | React · Vite |
@@ -102,14 +110,18 @@ https://ọpen-ạccess…   → IDN / script-borrow → BLOCK (+ /visual screen
 شكرا على المساعدة…     → clean Arabic business text → ALLOW
 ```
 
-**Pipeline:** MultilingualAgent normalises → Tier-1 heuristics → Tier-2 TF-IDF
-(DistilBERT when Torch is present) → optional Tier-3 LLM. Every scan returns
-`tier_used` / `tier2_backend`. Homograph / GitHub inputs can escalate to
+**Pipeline (what the demo runs):** MultilingualAgent normalises → Tier-1 heuristics →
+Tier-2 TF-IDF (or DistilBERT if Torch is installed). **Tier-3 LLM is off unless you
+configure an OpenAI-compatible endpoint** — `/chat` and `/demo` do not imply Tier-3.
+Every scan returns `tier_used` / `tier2_backend`. Homograph / GitHub inputs can use
 `POST /v1/scan/visual` for annotated evidence images.
 
 ### Eval — *not* a production benchmark
 
 UI: `/eval` · API: `GET /v1/eval/code-switch`
+
+This submission ships a fixed labeled set (**n=30**). Numbers below are intentional and
+unchanged for this round — growth is roadmap, not silent cherry-picking.
 
 | Set | n | Exact match | Precision | Recall | FPR |
 |---|---|---|---|---|---|
@@ -136,9 +148,9 @@ Tier-2/LLM-tier gaps, not normalisation failures. Misses stay in the set.
 |---|---|
 | Code-switch hero `/demo` + normalisation | ✅ |
 | Live eval `/eval` (n=30, kept misses) | ✅ |
-| Role-adaptive chatbot `/chat` | ✅ |
-| Visual evidence `/visual` (URL + **GitHub → annotated screenshots**) | ✅ when Chromium installed |
-| Workflow builder `/workflow` | ✅ |
+| Role-adaptive `/chat` (Tier-1+2; prepared LLM-style foil for pre-processing point) | ✅ |
+| Visual evidence `/visual` (URL + GitHub → annotated screenshots) | ✅ when Chromium installed |
+| Workflow builder `/workflow` (compose pipelines; models untouched) | ✅ |
 | Tier-2 live (TF-IDF / pure-Python) | ✅ |
 | Demo ERP · SAP webhook stub | ✅ |
 | Swarm Guard · Field Mode | ✅ (extensions) |
@@ -148,8 +160,11 @@ Tier-2/LLM-tier gaps, not normalisation failures. Misses stay in the set.
 | Item | Reality |
 |---|---|
 | Visual capture without Playwright/Chromium | Falls back to text-only scan |
-| Tier-3 LLM / DistilBERT / LoRA *train* | Optional GPU or API key |
+| Tier-3 LLM | **Off by default** — needs OpenAI-compatible URL + key |
+| DistilBERT / LoRA *train* | Optional GPU |
+| “We beat ChatGPT” | **Not claimed** — `/chat` foil shows need for a purpose-built layer |
 | Certified ERP connectors | Harnesses only |
+| Eval set growth past n=30 | Roadmap (adversarial Arabizi mining) |
 
 ---
 
@@ -172,9 +187,9 @@ Auth: `Authorization: Bearer internal` (or `SYRA_API_KEYS`).
 ## Pitch
 
 SyRA is an AI/ML engine for **messy enterprise language and confusable script** —
-code-switch payloads, Arabizi, Arabic digits, homograph URLs — with a live eval
-harness, a role-adaptive chatbot, visual evidence from URLs/GitHub, and a workflow
-builder on the same decision spine.
+code-switch payloads, Arabizi, Arabic digits, homograph URLs — running on **Tier-1+2
+with no API key**, with a live eval harness that reports precision, recall, FPR, and
+kept misses.
 
 **Next:** grow the labeled set past 30 with adversarial Arabizi mining; deepen GitHub
 visual rulesets on the existing Playwright path.
