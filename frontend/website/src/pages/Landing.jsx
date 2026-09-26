@@ -266,7 +266,8 @@ export default function Landing() {
         <p className="reveal land-sub">
           SyRA is an Arabic-aware, multi-agent cybersecurity decision engine that scans ERP forms,
           APIs, and messages in real time — then returns ALLOW, WARN, or BLOCK before the data is
-          ever saved. Built for code-switching attackers, agent swarms, and field glare.
+          ever saved. Built for code-switching attackers, agent swarms, and field
+          glare / heat / exhaustion.
         </p>
         <div className="reveal land-hero-actions">
           <FadeLink to="/demo" className="land-btn-primary">Code-Switch Demo</FadeLink>
@@ -306,16 +307,17 @@ export default function Landing() {
             <div className="land-agent-num">02</div>
             <h3>Swarm Guard · Sybil (Web3-shaped)</h3>
             <p>
-              One actor pretending to be many. Burst fingerprint detector → SYBIL_SUSPECT.
-              Stake-gated Bayesian feedback. Agent attestation into the SHA-256 chain.
+              One actor pretending to be many — not a blockchain product. Burst detector
+              (5 users / 30s) → SYBIL_SUSPECT; only role=analyst updates Bayesian priors;
+              per-scan audit_hash binds agent_id (investigation trail is the chained hash).
             </p>
           </div>
           <div className="land-agent-card reveal" style={{ transitionDelay: "120ms" }}>
             <div className="land-agent-num">03</div>
-            <h3>Glare / Field Mode (Web)</h3>
+            <h3>Field Mode (Web)</h3>
             <p>
-              Extreme contrast, huge targets, hold-to-confirm on BLOCK — for phones used in
-              the sun, not quiet SOC monitors.
+              Glare: extreme contrast. Heat: no motion, oversized targets. Exhaustion:
+              hold-to-confirm on BLOCK — phones outdoors, not quiet SOC monitors.
             </p>
           </div>
         </div>

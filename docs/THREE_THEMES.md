@@ -50,9 +50,13 @@ You are not building Ethereum. You are answering the **same trust problem**:
 
 > When creating 10,000 "participants" is free, how do you know a scan / vote / alert / agent action came from a **real stake**, not a swarm?
 
+**Why “Sybil resistance” is still the right label:** Sybil = one actor pretending
+to be many. SyRA’s countermeasures are burst detection + analyst RBAC — not
+on-chain stake. Say that out loud before a judge asks.
+
 SyRA's existing assets that map cleanly:
-- SHA-256 checkpoint / audit chain (tamper-evident history)
-- Bayesian thresholds from **human** analyst feedback (stake = human cost)
+- Per-scan SHA-256 `audit_hash` (not chained) + investigation `prev_hash` **chain**
+- Bayesian thresholds from **human** analyst feedback (`role=analyst` = human cost)
 - VerifierAgent as false-positive meta-judge
 - API keys / bearer auth (too weak alone — say so)
 
@@ -81,18 +85,14 @@ SyRA's existing assets that map cleanly:
 Your dashboard is a dark desktop UI. The problem asks for **field ops**: glare, heat, exhaustion — emergency / workplace compliance logging.
 
 ### Framing change
-> Security and compliance logging does not happen in a quiet office. SyRA's **Glare Mode** is an operational UI for phones and tablets used outdoors, in warehouses, and at incident sites — large type, extreme contrast, one-thumb verdicts, exhaustion-safe actions.
+> Security and compliance logging does not happen in a quiet office. SyRA's **Field Mode** is an operational UI for phones and tablets used outdoors — glare, heat, and exhaustion each map to a concrete UI knob.
 
-### Features to add (this is the most visible "new" demo surface)
-1. **Glare / Field Mode toggle** (global CSS)
-   - Near-white or pure black + yellow/amber text only
-   - Min 18–22px body, 28–36px verdict
-   - No thin gray-on-gray; WCAG AAA contrast
-   - Huge ALLOW / WARN / BLOCK buttons (full-width, 56px+)
-2. **Exhaustion-safe confirm** — BLOCK requires hold-to-confirm or two-step; ALLOW is one tap (reduce mis-taps under stress).
-3. **Offline / delayed sync queue** — log decision locally if network flakes in the field; sync when back online (even a stub UI counts).
-4. **Sun-readable scan result card** — one word verdict + one sentence reason; hide JSON unless "Details."
-5. **Voice / large-target feedback** — optional: approve/reject investigation with two giant buttons only.
+### Shipped Field Mode mechanisms
+1. **Glare** — extreme black/yellow contrast; no gray-on-gray
+2. **Heat** — CSS animations/transitions forced off; ≥56px targets; wider tap gaps
+3. **Exhaustion** — hold-to-confirm (~700ms) on BLOCK in `/demo`
+
+Optional later: offline sync queue, voice targets.
 
 ### Demo line for judges
 > "WAFs are designed for SOC monitors. Incidents are logged in parking lots. SyRA's field UI is built for the parking lot."

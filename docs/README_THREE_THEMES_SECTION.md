@@ -20,36 +20,38 @@ not an edge case:
 ọpen-ạccess.com        → script-borrowing / IDN homograph
 ```
 
-Normalization runs **before** pattern matching. English-first WAFs miss these;
-SyRA is built so they cannot.
+Normalization runs **before** pattern matching. The click-path corpus is **12**
+samples (`GET /v1/demo/code-switch`). Demo-corpus eval (n=12): attack-detection
+precision **1.00**, recall **0.90**, FPR **0.00**, exact match **83.3%** — label
+these as corpus numbers, not a production benchmark. Keep off-corpus strings
+ready to type live (see README).
 
 ### 02 — Sybil resistance under agent swarms (trust / Web3-shaped)
 
-Networks assume each participant is a separate someone with something to lose —
-exactly when acting as ten thousand costs almost nothing and looks ordinary.
+A Sybil attack means **one actor pretending to be many**. Blockchain stake is
+one cost model for multiplicity — SyRA is **not** a chain/token product. It
+applies the same threat model to the **security decision plane**:
 
-SyRA applies that threat model to the **security decision plane**:
-
-| Swarm abuse | SyRA counter |
+| Swarm abuse | SyRA counter (honest) |
 |---|---|
-| Flood of automated scans / fake identities | Burst + fingerprint clustering → `SYBIL_SUSPECT`, raised thresholds |
-| Fake "analyst" feedback poisoning thresholds | Stake-gated feedback — only authenticated human analyst roles move Bayesian priors |
-| Forged agent investigation steps | Each agent transition is attested into the SHA-256 checkpoint chain (`agent_id` + model + state hash) |
+| Flood of automated scans / fake identities | Burst + fingerprint (≥5 `user_id`s / 30s) → `SYBIL_SUSPECT` |
+| Fake "analyst" feedback poisoning thresholds | RBAC: only `role=analyst` moves Bayesian priors |
+| Forged agent steps | Per-scan `audit_hash` includes `agent_id`; **investigation** records form a SHA-256 `prev_hash` **chain** |
 
-Cheap multiplicity can generate traffic. It cannot cheaply forge **human stake**
-or rewrite a **tamper-evident investigation chain**.
+Cheap multiplicity can generate traffic. Raising the cost of *trusted* feedback
+still requires a real analyst role — that is why we use the Sybil label without
+claiming on-chain stake.
 
 ### 03 — Built for a quiet room, used in the sun (Web / ops UI)
 
 Operational UIs are designed for climate-controlled desktops. Emergency and
 workplace compliance logging happens under solar glare, heat, and exhaustion.
 
-SyRA ships a **Field / Glare Mode** for phones and tablets at the incident site:
+SyRA **Field Mode** maps each stressor to a UI mechanism:
 
-- Extreme contrast (sun-readable); no thin gray-on-gray
-- Oversized ALLOW / WARN / BLOCK targets for gloved or fatigued hands
-- One-sentence verdict first; forensic JSON only behind Details
-- Hold-to-confirm on BLOCK to prevent mis-taps under stress
+- **Glare** — extreme black/yellow contrast; no thin gray-on-gray
+- **Heat** — animations off; oversized (≥56px) targets and wider tap gaps
+- **Exhaustion** — hold-to-confirm (~700ms) on BLOCK in `/demo`; one-word verdict first
 
 The SOC monitor is optional. The parking-lot logger is first-class.
 
@@ -57,11 +59,13 @@ The SOC monitor is optional. The parking-lot logger is first-class.
 
 ```text
 Messy human language  →  Multilingual / phonetic layer catches real payloads
-Cheap agent swarms    →  Stake + attestation keeps the decision plane honest
-Hostile field UI      →  Glare Mode lets exhausted humans still log correctly
+Cheap agent swarms    →  Burst + analyst RBAC keeps the decision plane honest
+Hostile field UI      →  Field Mode lets exhausted humans still log correctly
 ```
 
 One product. Three domains. Same ALLOW / WARN / BLOCK spine.
 
-**Demo integration:** A demo ERP host is wired for the live demo — not the product
-boundary. Any platform that can call `POST /v1/scan` is in scope.
+**Demo integration:** Demo ERP (`/erp-demo`) is a **testing harness** — not a
+production ERP inject. Any platform that can call `POST /v1/scan` is in scope
+to wire later. Prefer localhost if a public deploy 502s; keep a short `/demo`
+recording as fallback.

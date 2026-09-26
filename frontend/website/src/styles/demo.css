@@ -219,7 +219,11 @@
   font-weight: 600;
 }
 
-/* ── Glare / Field Mode (Theme 03) ─────────────────────────────────────────── */
+/* ── Field Mode (Theme 03): glare + heat + exhaustion ────────────────────────
+   Glare  → extreme contrast
+   Heat   → no CSS motion; oversized targets / gaps (sweaty / outdoor hands)
+   Exhaustion → pair with hold-to-confirm on BLOCK (/demo); large verdict type
+──────────────────────────────────────────────────────────────────────────── */
 .glare-toggle {
   border: 2px solid #111827;
   background: #fff;
@@ -246,6 +250,15 @@ html[data-glare="on"] {
   --syra-muted: #111111;
   --syra-green-bg: #ffff00;
   --syra-green-text: #000000;
+}
+
+/* Heat: kill decorative motion that worsens outdoor dizziness / lag */
+html[data-glare="on"] *,
+html[data-glare="on"] *::before,
+html[data-glare="on"] *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
 }
 
 html[data-glare="on"] body,
@@ -301,6 +314,12 @@ html[data-glare="on"] .syra-nav-link {
   min-height: 56px;
   border-width: 3px;
   font-size: 16px;
+}
+
+/* Heat / exhaustion: extra tap gap so adjacent controls are harder to mis-hit */
+html[data-glare="on"] .cs-samples li + li,
+html[data-glare="on"] .syra-nav-link + .syra-nav-link {
+  margin-top: 10px;
 }
 
 html[data-glare="on"] .cs-sample-btn {

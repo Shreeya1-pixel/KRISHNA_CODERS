@@ -166,6 +166,7 @@ async def _run_scan(input_text: str, context: ScanContext) -> Dict[str, Any]:
     if graph_evidence:
         result["graph_evidence"] = graph_evidence.to_dict()
 
+    # Per-scan integrity fingerprint (NOT chained). Investigation records use prev_hash.
     agent_id = context.agent_id or "scan_orchestrator"
     audit_payload = f"{scan_id}|{agent_id}|{input_text}|{decision}|{final_score}"
     result["audit_hash"] = hashlib.sha256(audit_payload.encode()).hexdigest()

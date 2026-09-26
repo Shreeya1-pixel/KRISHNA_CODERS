@@ -250,7 +250,7 @@ export default function CodeSwitchDemo() {
                   </dd>
                 </div>
                 <div>
-                  <dt>Audit hash</dt>
+                  <dt>Audit hash (per-scan)</dt>
                   <dd>
                     <code className="cs-hash">{result.audit_hash || "—"}</code>
                   </dd>

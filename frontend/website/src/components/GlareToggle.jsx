@@ -19,7 +19,7 @@ export function applyGlareMode(on) {
   }
 }
 
-/** Global Field / Glare Mode toggle (Theme 03). Works even if backend is down. */
+/** Field Mode: glare contrast + heat (no motion / large targets) + exhaustion (pair with hold-to-confirm). */
 export default function GlareToggle({ className = "" }) {
   const [on, setOn] = useState(false);
 
@@ -40,10 +40,10 @@ export default function GlareToggle({ className = "" }) {
       type="button"
       className={`glare-toggle ${on ? "active" : ""} ${className}`}
       onClick={toggle}
-      title="Field / Glare Mode — extreme contrast for outdoor use"
+      title="Field Mode — glare contrast, heat-safe (no motion / large targets), exhaustion-safe BLOCK confirm on /demo"
       aria-pressed={on}
     >
-      {on ? "Glare ON" : "Glare Mode"}
+      {on ? "Field ON" : "Field Mode"}
     </button>
   );
 }
